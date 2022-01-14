@@ -23,8 +23,9 @@ include_directories(${PROJECT_SOURCE_DIR}/test/)
 # Define dependencies
 ## Google Logging Library
 target_link_libraries(Imaginary glog)
-find_package( OpenCV REQUIRED )
-include_directories( ${OpenCV_INCLUDE_DIRS} )
+find_package(OpenCV REQUIRED)
+include_directories(${OpenCV_INCLUDE_DIRS})
+target_link_libraries(Imaginary ${OpenCV_LIBS})
 
 # If Catch2 is installed prepare the `Test` target
 find_package(Catch2 CONFIG)
@@ -33,6 +34,8 @@ IF (Catch2_FOUND)
     add_executable(Test ${GEN_PROTO_FILES} ${TEST_SRCS} ${SRCS} ${LIBS})
 
     add_compile_definitions(Test PRIVATE ERRORS_AS_WARNINGS)
+
+    target_link_libraries(Test PRIVATE ${OpenCV_LIBS})
 
     target_link_libraries(Test PRIVATE Catch2::Catch2)
     include(CTest)

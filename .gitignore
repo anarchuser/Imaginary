@@ -5,3 +5,6 @@
 /*build*
 /*tmp*
 
+# Exclude image dirs
+/in
+/out
