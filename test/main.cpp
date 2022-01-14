@@ -4,7 +4,7 @@
 #include <glog/logging.h>
 #include <catch2/catch.hpp>
 
-#include "../config.h"
+#include "config.h"
 
 using namespace std;
 
