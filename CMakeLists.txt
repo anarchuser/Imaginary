@@ -15,6 +15,8 @@ file(GLOB_RECURSE SRCS ${PROJECT_SOURCE_DIR}/src/*)
 list(REMOVE_ITEM SRCS ${PROJECT_SOURCE_DIR}/src/main.cpp)
 add_executable(Imaginary ${PROJECT_SOURCE_DIR}/src/main.cpp ${PROJECT_SOURCE_DIR}/config.h ${SRCS} ${LIBS})
 
+add_compile_definitions(Imaginary PROJECT_ROOT="${PROJECT_SOURCE_DIR}")
+
 include_directories(${PROJECT_SOURCE_DIR}/)
 include_directories(${PROJECT_SOURCE_DIR}/lib/)
 include_directories(${PROJECT_SOURCE_DIR}/src/)
@@ -43,4 +45,4 @@ IF (Catch2_FOUND)
     catch_discover_tests(Test)
 
     target_link_libraries(Test PRIVATE glog)
-ENDIF()
+ENDIF ()

@@ -20,6 +20,8 @@
 
 #include "config.h"
 
+#include "grayify.hpp"
+
 using namespace cv;
 using namespace std;
 
@@ -27,21 +29,21 @@ int main (int argc, char * argv[]) {
     google::InitGoogleLogging (argv[0]);
     
     // Read the image file
-    Mat image = imread("../bird.png");
+    Mat image = imread (IMG_IN / "bird.png");
     
     // Check for failure
-    if (image.empty()) {
+    if (image.empty ()) {
         cout << "Could not open or find the image" << endl;
-        cin.get(); //wait for any key press
+        cin.get ();
         return -1;
     }
+    cout << "Successfully opened the image with dimension " << image.rows << "x" << image.cols << std::endl;
     
-    String windowName = "The Guitar"; //Name of the window
-    namedWindow(windowName); // Create a window
-    imshow(windowName, image); // Show our image inside the created window.
-    waitKey(0); // Wait for any keystroke in the window
-    destroyWindow(windowName); //destroy the created window
-
-    LOG (INFO) << "Hello World";
-    std::cout << "Hello World" << std::endl;
+    grayify (image);
+    
+    String windowName = "The Little Bird";
+    namedWindow (windowName);
+    imshow (windowName, image);
+    waitKey (0);
+    destroyWindow (windowName);
 }
