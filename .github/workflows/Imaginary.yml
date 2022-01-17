@@ -6,9 +6,8 @@ jobs:
     steps:
       - name: install cmake
         run: sudo apt install cmake
-      - uses: Dovyski/setup-opencv-action@v1
-        with:
-          opencv-version: '4.0.0'
+      - name: install OpenCV
+        run: sudo apt install libopencv-dev
       - name: install google logging library
         run: sudo apt install -y libgoogle-glog-dev
 
@@ -25,9 +24,8 @@ jobs:
     steps:
       - name: install cmake
         run: sudo apt install cmake
-      - uses: Dovyski/setup-opencv-action@v1
-        with:
-          opencv-version: '4.0.0'
+      - name: install OpenCV
+        run: sudo apt install libopencv-dev
       - name: install google logging library
         run: sudo apt install -y libgoogle-glog-dev
       - name: download catch2 v2

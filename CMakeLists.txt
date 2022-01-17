@@ -5,8 +5,13 @@ project(Imaginary)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_COMPILER g++)
 
+# Library linker flags
+set(LDLIBS_GLOG "-lglog")
+set(LDLIBS_OPENCV "-lopencv_core -lopencv_calib3d -lopencv_highgui -lopencv_imgproc -lopencv_stitching -lopencv_video")
+set(LDLIBS_OPENCV "lopencv_core -l opencv_imgcodecs -l opencv_highgui -lopencv_photo -l opencv_videoio -l opencv_imgproc -l opencv_calib3d")
+
 # Linker & compiler flags
-set(CMAKE_REQUIRED_LIBRARIES "-lglog")
+set(CMAKE_REQUIRED_LIBRARIES ${LDLIBS_GLOG} ${LDLIBS_OPENCV})
 set(CMAKE_CXX_FLAGS "-fconcepts")
 
 # List source files and define target
@@ -25,6 +30,7 @@ include_directories(${PROJECT_SOURCE_DIR}/test/)
 # Define dependencies
 ## Google Logging Library
 target_link_libraries(Imaginary glog)
+
 find_package(OpenCV REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS})
 target_link_libraries(Imaginary ${OpenCV_LIBS})
