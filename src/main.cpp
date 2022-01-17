@@ -18,7 +18,6 @@
 #include <opencv2/opencv.hpp>
 #include <iostream>
 #include <filesystem>
-#include <unordered_map>
 
 #include "config.h"
 
@@ -30,14 +29,14 @@ namespace fs = std::filesystem;
 int main (int argc, char * argv[]) {
     google::InitGoogleLogging (argv[0]);
 
-    std::unordered_map <std::string, Mat> originals;
+    std::vector <std::pair <fs::path, Mat>> originals;
     // Read all files from argv
     std::cout << "Files read from arguments:" << std::endl;
     for (std::size_t i = 1; i < argc; i++) {
         Mat image = imread (argv [i]);
         if (image.empty ()) continue;
         std::cout << argv [i] << ":\t" << image.rows << 'x' << image.cols << std::endl;
-        originals [fs::path (argv [i])] = std::move (image);
+        originals.emplace_back (fs::path (argv [i]), std::move (image));
     }
 
     // Read all files in IMG_IN dir
@@ -46,7 +45,7 @@ int main (int argc, char * argv[]) {
         Mat image = imread (file.path());
         if (image.empty ()) continue;
         std::cout << file.path() << ":\t" << image.rows << 'x' << image.cols << std::endl;
-        originals [fs::path (file)] = std::move (image);
+        originals.emplace_back (fs::path (file), std::move (image));
     }
 
     for (auto const & original : originals) {
