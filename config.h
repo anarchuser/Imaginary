@@ -29,6 +29,8 @@ namespace fs = std::filesystem;
 fs::path const IMG_IN  = PROJECT_ROOT "/in";
 fs::path const IMG_OUT = PROJECT_ROOT "/out";
 
+#define NO_SYMLINK
+
 #endif //Imaginary_CONFIG_H
 
 /* Copyright (C) 2022 Aaron Alef */

@@ -23,7 +23,7 @@ struct Color_BGR {
 
 // TODO: replace 3 color channels with 1 average channel
 cv::Mat grayify (cv::Mat const & original) {
-    cv::Mat img (original.rows, original.cols, CV_64F);
+    cv::Mat img (original.rows, original.cols, CV_64FC1);
     for (int y = 0; y < original.rows; y++) {
         auto original_row = original.ptr <Color_BGR> (y);
         auto img_row = img.ptr <double> (y);

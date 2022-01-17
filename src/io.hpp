@@ -50,7 +50,11 @@ void write_image (std::string const & relative_path, std::pair <std::string, cv:
     fs::create_directories (sym_folder);
     LOG_ASSERT (fs::exists (sym_folder));
     LOG_ASSERT (! fs::exists (sym_folder / relative_path));
+#ifdef NO_SYMLINK
+    cv::imwrite (sym_folder / relative_path, image.second);
+#else
     fs::create_symlink (folder / image.first, sym_folder / relative_path);
+#endif
     LOG_ASSERT (fs::exists (sym_folder / relative_path));
 }
 
