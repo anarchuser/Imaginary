@@ -34,7 +34,6 @@ int main (int argc, char * argv[]) {
     // Check for failure
     if (image.empty ()) {
         cout << "Could not open or find the image" << endl;
-        cin.get ();
         return -1;
     }
     cout << "Successfully opened the image with dimension " << image.rows << "x" << image.cols << std::endl;
