@@ -35,7 +35,7 @@ int main (int argc, char * argv[]) {
     std::vector <std::pair <std::string, Mat>> gray_scales;
     std::transform (originals.begin(), originals.end(), std::back_inserter (gray_scales),
                     [] (std::pair <std::string, Mat> const & pair) -> std::pair <std::string, Mat> {
-                        return {pair.first, grayify (pair.second.clone())};
+                        return {pair.first, grayify (pair.second)};
     });
 
     init_out();
