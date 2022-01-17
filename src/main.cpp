@@ -17,32 +17,39 @@
 
 #include <opencv2/opencv.hpp>
 #include <iostream>
+#include <filesystem>
+#include <unordered_map>
 
 #include "config.h"
 
 #include "grayify.hpp"
 
 using namespace cv;
-using namespace std;
+namespace fs = std::filesystem;
 
 int main (int argc, char * argv[]) {
     google::InitGoogleLogging (argv[0]);
-    
-    // Read the image file
-    Mat image = imread (IMG_IN / "bird.png");
-    
-    // Check for failure
-    if (image.empty ()) {
-        cout << "Could not open or find the image" << endl;
-        return -1;
+
+    std::unordered_map <std::string, Mat> originals;
+    // Read all files from argv
+    std::cout << "Files read from arguments:" << std::endl;
+    for (std::size_t i = 1; i < argc; i++) {
+        Mat image = imread (argv [i]);
+        if (image.empty ()) continue;
+        std::cout << argv [i] << ":\t" << image.rows << 'x' << image.cols << std::endl;
+        originals [fs::path (argv [i])] = std::move (image);
     }
-    cout << "Successfully opened the image with dimension " << image.rows << "x" << image.cols << std::endl;
-    
-    grayify (image);
-    
-    String windowName = "The Little Bird";
-    namedWindow (windowName);
-    imshow (windowName, image);
-    while (waitKey (0) != 27);
-    destroyWindow (windowName);
+
+    // Read all files in IMG_IN dir
+    std::cout << "Files read from IMG_IN directory:" << std::endl;
+    for (auto const & file : fs::directory_iterator (IMG_IN)) {
+        Mat image = imread (file.path());
+        if (image.empty ()) continue;
+        std::cout << file.path() << ":\t" << image.rows << 'x' << image.cols << std::endl;
+        originals [fs::path (file)] = std::move (image);
+    }
+
+    for (auto const & original : originals) {
+        imwrite (IMG_OUT / fs::path (original.first).filename(), original.second);
+    }
 }

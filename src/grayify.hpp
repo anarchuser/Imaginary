@@ -15,7 +15,7 @@ struct Color_BGR {
     }
 };
 
-void grayify (cv::Mat & img) {
+cv::Mat grayify (cv::Mat img) {
     for (int y = 0; y < img.rows; y++) {
         for (int x = 0; x < img.cols; x++) {
             Color_BGR & color = img.ptr <Color_BGR> (y) [x];
@@ -25,6 +25,7 @@ void grayify (cv::Mat & img) {
             color.blue() = avg;
         }
     }
+    return img;
 }
 
 #endif //_IMAGINARY_GRAYIFY_HPP
