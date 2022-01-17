@@ -19,11 +19,15 @@
 }; true
 #endif
 
+#include <opencv2/opencv.hpp>
+
 #include <filesystem>
 
+namespace fs = std::filesystem;
+
 // TODO: factor out into a "Config" struct
-std::filesystem::path const IMG_IN  = PROJECT_ROOT "/in";
-std::filesystem::path const IMG_OUT = PROJECT_ROOT "/out";
+fs::path const IMG_IN  = PROJECT_ROOT "/in";
+fs::path const IMG_OUT = PROJECT_ROOT "/out";
 
 #endif //Imaginary_CONFIG_H
 

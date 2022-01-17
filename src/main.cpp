@@ -22,12 +22,14 @@
 #include "config.h"
 
 #include "grayify.hpp"
+#include "io.hpp"
 
 using namespace cv;
 namespace fs = std::filesystem;
 
 int main (int argc, char * argv[]) {
     google::InitGoogleLogging (argv[0]);
+
 
     std::vector <std::pair <std::string, Mat>> originals;
     // Read all files from argv
@@ -48,7 +50,8 @@ int main (int argc, char * argv[]) {
         originals.emplace_back (fs::path (file).filename(), std::move (image));
     }
 
+    init_out();
     for (auto const & original : originals) {
-        imwrite (IMG_OUT / original.first, original.second);
+        write_image ("original", original);
     }
 }
