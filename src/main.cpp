@@ -44,6 +44,6 @@ int main (int argc, char * argv[]) {
     String windowName = "The Little Bird";
     namedWindow (windowName);
     imshow (windowName, image);
-    waitKey (0);
+    while (waitKey (0) != 27);
     destroyWindow (windowName);
 }
