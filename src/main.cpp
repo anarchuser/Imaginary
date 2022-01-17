@@ -50,8 +50,17 @@ int main (int argc, char * argv[]) {
         originals.emplace_back (fs::path (file).filename(), std::move (image));
     }
 
+    std::vector <std::pair <std::string, Mat>> gray_scales;
+    std::transform (originals.begin(), originals.end(), std::back_inserter (gray_scales),
+                    [] (std::pair <std::string, Mat> const & pair) -> std::pair <std::string, Mat> {
+                        return {pair.first, grayify (pair.second.clone())};
+    });
+
     init_out();
     for (auto const & original : originals) {
         write_image ("original", original);
+    }
+    for (auto const & gray_scale : gray_scales) {
+        write_image ("gray", gray_scale);
     }
 }
