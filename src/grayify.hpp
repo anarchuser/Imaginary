@@ -19,7 +19,7 @@ cv::Mat grayify (cv::Mat img) {
     for (int y = 0; y < img.rows; y++) {
         for (int x = 0; x < img.cols; x++) {
             Color_BGR & color = img.ptr <Color_BGR> (y) [x];
-            unsigned char avg = (unsigned char) (color.red() + color.green() + color.blue()) / 3;
+            unsigned char avg = (color.red() + color.green() + color.blue()) / 3;
             color.red() = avg;
             color.green() = avg;
             color.blue() = avg;
