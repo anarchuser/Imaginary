@@ -22,6 +22,8 @@
 #include "config.h"
 
 #include "grayify.hpp"
+#include "multiply.hpp"
+
 #include "io.hpp"
 
 using namespace cv;
@@ -32,17 +34,44 @@ int main (int argc, char * argv[]) {
 
     auto originals = read_images (argc - 1, argv + 1);
 
+    std::vector <std::pair <std::string, Mat>> originals_2;
+//    std::transform (originals.begin(), originals.end(), std::back_inserter (originals_2),
+//                    [] (std::pair <std::string, Mat> const & pair) -> std::pair <std::string, Mat> {
+//                        return {pair.first, twice (pair.second)};
+//    });
+
     std::vector <std::pair <std::string, Mat>> gray_scales;
     std::transform (originals.begin(), originals.end(), std::back_inserter (gray_scales),
                     [] (std::pair <std::string, Mat> const & pair) -> std::pair <std::string, Mat> {
                         return {pair.first, grayify (pair.second)};
-    });
+                    });
+
+    std::vector <std::pair <std::string, Mat>> gray_scales_2;
+    std::transform (gray_scales.begin(), gray_scales.end(), std::back_inserter (gray_scales_2),
+                    [] (std::pair <std::string, Mat> const & pair) -> std::pair <std::string, Mat> {
+                        return {pair.first, twice_gray (pair.second)};
+                    });
+
+    std::vector <std::pair <std::string, Mat>> gray_scales_16;
+    std::transform (gray_scales.begin(), gray_scales.end(), std::back_inserter (gray_scales_16),
+                    [] (std::pair <std::string, Mat> const & pair) -> std::pair <std::string, Mat> {
+                        return {pair.first, twice_gray (twice_gray (twice_gray (twice_gray (pair.second))))};
+                    });
 
     init_out();
     for (auto const & original : originals) {
         write_image ("original", original);
     }
+    for (auto const & original : originals_2) {
+        write_image ("original_2", original);
+    }
     for (auto const & gray_scale : gray_scales) {
         write_image ("gray", gray_scale);
+    }
+    for (auto const & gray_scale : gray_scales_2) {
+        write_image ("gray_2", gray_scale);
+    }
+    for (auto const & gray_scale : gray_scales_16) {
+        write_image ("gray_16", gray_scale);
     }
 }
