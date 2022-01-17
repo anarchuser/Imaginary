@@ -29,14 +29,14 @@ namespace fs = std::filesystem;
 int main (int argc, char * argv[]) {
     google::InitGoogleLogging (argv[0]);
 
-    std::vector <std::pair <fs::path, Mat>> originals;
+    std::vector <std::pair <std::string, Mat>> originals;
     // Read all files from argv
     std::cout << "Files read from arguments:" << std::endl;
     for (std::size_t i = 1; i < argc; i++) {
         Mat image = imread (argv [i]);
         if (image.empty ()) continue;
         std::cout << argv [i] << ":\t" << image.rows << 'x' << image.cols << std::endl;
-        originals.emplace_back (fs::path (argv [i]), std::move (image));
+        originals.emplace_back (fs::path (argv [i]).filename(), std::move (image));
     }
 
     // Read all files in IMG_IN dir
@@ -45,10 +45,10 @@ int main (int argc, char * argv[]) {
         Mat image = imread (file.path());
         if (image.empty ()) continue;
         std::cout << file.path() << ":\t" << image.rows << 'x' << image.cols << std::endl;
-        originals.emplace_back (fs::path (file), std::move (image));
+        originals.emplace_back (fs::path (file).filename(), std::move (image));
     }
 
     for (auto const & original : originals) {
-        imwrite (IMG_OUT / fs::path (original.first).filename(), original.second);
+        imwrite (IMG_OUT / original.first, original.second);
     }
 }
