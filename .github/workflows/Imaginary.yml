@@ -1,22 +1,18 @@
 name: Imaginary
 on: [ push ]
 jobs:
-  dependencies:
+  runs:
     runs-on: ubuntu-latest
     steps:
       - name: install cmake
         run: sudo apt install cmake
-
-  runs:
-    needs: dependencies
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
       - uses: Dovyski/setup-opencv-action@v1
         with:
           opencv-version: '4.0.0'
       - name: install google logging library
         run: sudo apt install -y libgoogle-glog-dev
+
+      - uses: actions/checkout@v2
       - name: configure cmake
         run: cmake -H. -Bbuild
       - name: Build src and lib files
@@ -25,10 +21,10 @@ jobs:
         run: ./build/Imaginary
 
   tests:
-    needs: dependencies
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: install cmake
+        run: sudo apt install cmake
       - uses: Dovyski/setup-opencv-action@v1
         with:
           opencv-version: '4.0.0'
@@ -40,6 +36,8 @@ jobs:
         run: cmake -BCatch2/build -HCatch2 -DBUILD_TESTING=OFF
       - name: build and install catch2
         run: sudo cmake --build Catch2/build --target install
+
+      - uses: actions/checkout@v2
       - name: configure cmake
         run: cmake -H. -Bbuild
       - name: Build test files
