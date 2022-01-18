@@ -31,6 +31,10 @@ fs::path const IMG_OUT = PROJECT_ROOT "/out";
 
 #define NO_SYMLINK
 
+#define GRAYIFY
+#define MULTIPLY_x2
+//#define MULTIPLY_x16
+
 #endif //Imaginary_CONFIG_H
 
 /* Copyright (C) 2022 Aaron Alef */
