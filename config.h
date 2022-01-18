@@ -31,9 +31,10 @@ fs::path const IMG_OUT = PROJECT_ROOT "/out";
 
 #define NO_SYMLINK
 
-#define GRAYIFY
 #define MULTIPLY_x2
 //#define MULTIPLY_x16
+#define GRAYIFY
+#define CONVOLUTE
 
 #endif //Imaginary_CONFIG_H
 

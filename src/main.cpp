@@ -23,11 +23,14 @@
 
 #include "grayify.hpp"
 #include "multiply.hpp"
+#include "convolute.hpp"
 
 #include "io.hpp"
 
 using namespace cv;
 namespace fs = std::filesystem;
+
+using Image = std::pair <std::string, Mat>;
 
 int main (int argc, char * argv[]) {
     google::InitGoogleLogging (argv[0]);
@@ -42,60 +45,88 @@ int main (int argc, char * argv[]) {
 
 #ifdef MULTIPLY_x2
     std::cout << "Calculating originals x2" << std::endl;
-    std::vector <std::pair <std::string, Mat>> originals_2;
+    std::vector <Image> originals_2;
     std::transform (originals.begin(), originals.end(), std::back_inserter (originals_2),
-                    [] (std::pair <std::string, Mat> const & pair) -> std::pair <std::string, Mat> {
-                        return {pair.first, twice (pair.second)};
+                    [] (Image const & image) -> Image {
+                        Image out (image.first, twice (image.second));
+                        write_image ("original_2", out);
+                        return out;
     });
-    for (auto const & original : originals_2) {
-        write_image ("original_2", original);
-    }
 
 #ifdef MULTIPLY_x16
     std::cout << "Calculating originals x16" << std::endl;
-    std::vector <std::pair <std::string, Mat>> originals_16;
+    std::vector <Image> originals_16;
     std::transform (originals_2.begin(), originals_2.end(), std::back_inserter (originals_16),
-                    [] (std::pair <std::string, Mat> const & pair) -> std::pair <std::string, Mat> {
-                        return {pair.first, twice (twice (twice (twice (pair.second))))};
-                    });
-    for (auto const & original : originals_16) {
-        write_image ("original_16", original);
-    }
+                    [] (Image const & image) -> Image {
+                        Image out (image.first, twice (twice (twice (image.second))));
+                        write_image ("original_16", out);
+                        return out;
+    });
 #endif
 #endif
 
 #ifdef GRAYIFY
     std::cout << "Calculating gray scale" << std::endl;
-    std::vector <std::pair <std::string, Mat>> gray_scales;
+    std::vector <Image> gray_scales;
     std::transform (originals.begin(), originals.end(), std::back_inserter (gray_scales),
-                    [] (std::pair <std::string, Mat> const & pair) -> std::pair <std::string, Mat> {
-                        return {pair.first, grayify (pair.second)};
+                    [] (Image const & image) -> Image {
+                        Image out (image.first, grayify (image.second));
+                        write_image ("gray", out);
+                        return out;
+    });
+
+#ifdef CONVOLUTE
+    std::cout << "Convoluting gray scales with 3x3 1's" << std::endl;
+    std::vector <Image> convoluted_3x3_gray;
+    std::transform (gray_scales.begin(), gray_scales.end(), std::back_inserter (convoluted_3x3_gray),
+                    [] (Image const & image) -> Image {
+                        auto img = convolute_gray (image.second, Mat (3, 3, CV_8UC1, 1));
+                        Image out (image.first, img);
+                        write_image ("convoluted_3x3_1", out);
+                        return out;
                     });
-    for (auto const & gray_scale : gray_scales) {
-        write_image ("gray", gray_scale);
-    }
+    std::cout << "Convoluting gray scales with 7x7 1's" << std::endl;
+    std::vector <Image> convoluted_7x7_gray;
+    std::transform (gray_scales.begin(), gray_scales.end(), std::back_inserter (convoluted_7x7_gray),
+                    [] (Image const & image) -> Image {
+                        auto img = convolute_gray (image.second, Mat (7, 7, CV_8UC1, 1));
+                        Image out (image.first, img);
+                        write_image ("convoluted_7x7_1", out);
+                        return out;
+                    });
+    std::cout << "Convoluting gray scales with 41x41 1's" << std::endl;
+    std::vector <Image> convoluted_41x41_gray;
+    std::transform (gray_scales.begin(), gray_scales.end(), std::back_inserter (convoluted_41x41_gray),
+                    [] (Image const & image) -> Image {
+                        auto img = image.second;
+                        for (int i = 0; i < 40; i++) {
+                            img = convolute_gray (img, Mat (3, 3, CV_8UC1, 1));
+                        }
+                        Image out (image.first, img);
+                        write_image ("convoluted_41x41", out);
+                        return out;
+                    });
+#endif
 
 #ifdef MULTIPLY_x2
     std::cout << "Calculating gray scale x2" << std::endl;
-    std::vector <std::pair <std::string, Mat>> gray_scales_2;
+    std::vector <Image> gray_scales_2;
     std::transform (gray_scales.begin(), gray_scales.end(), std::back_inserter (gray_scales_2),
-                    [] (std::pair <std::string, Mat> const & pair) -> std::pair <std::string, Mat> {
-                        return {pair.first, twice_gray (pair.second)};
-                    });
-    for (auto const & gray_scale : gray_scales_2) {
-        write_image ("gray_2", gray_scale);
-    }
+                    [] (Image const & image) -> Image {
+                        Image out (image.first, twice_gray (image.second));
+                        write_image ("gray_2", out);
+                        return out;
+    });
 
 #ifdef MULTIPLY_x16
     std::cout << "Calculating gray scale x16" << std::endl;
-    std::vector <std::pair <std::string, Mat>> gray_scales_16;
+    std::vector <Image> gray_scales_16;
     std::transform (gray_scales_2.begin(), gray_scales_2.end(), std::back_inserter (gray_scales_16),
-                    [] (std::pair <std::string, Mat> const & pair) -> std::pair <std::string, Mat> {
-                        return {pair.first, twice_gray (twice_gray (twice_gray (pair.second)))};
-                    });
-    for (auto const & gray_scale : gray_scales_16) {
-        write_image ("gray_16", gray_scale);
-    }
+                    [] (Image const & image) -> Image {
+                        Image out (image.first, twice_gray (twice_gray (twice_gray (image.second))));
+                        write_image ("gray_16", out);
+                        return out;
+    });
 #endif
 #endif
 #endif
