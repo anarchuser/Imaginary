@@ -4,23 +4,25 @@
 #include <opencv2/opencv.hpp>
 #include <opencv2/core/hal/interface.h>
 
+#include <cmath>
+
 #include "bgr_t.hpp"
 
 #include "config.h"
 
 // TODO: replace 3 color channels with 1 average channel
-cv::Mat grayify (cv::Mat const & original) {
-    cv::Mat img (original.rows, original.cols, CV_64FC1);
-    for (int y = 0; y < original.rows; y++) {
-        auto original_row = original.ptr <Color_BGR> (y);
-        auto img_row = img.ptr <double> (y);
+cv::Mat grayify (cv::Mat const & src) {
+    cv::Mat dest (src.rows, src.cols, CV_64FC1);
 
-        for (int x = 0; x < original.cols; x++) {
-            Color_BGR color = original_row [x];
-            img_row [x] = (double) (color.red() + color.green() + color.blue()) / 3;
+    for (int y = 0; y < src.rows; y++) {
+        auto src_row = src.ptr <Color_BGR> (y);
+        auto dest_row = dest.ptr <double> (y);
+
+        for (int x = 0; x < src.cols; x++) {
+            dest_row [x] = src_row [x].average();
         }
     }
-    return img;
+    return dest;
 }
 
 cv::Mat twice_gray (cv::Mat const & original) {
