@@ -73,7 +73,18 @@ int main (int argc, char * argv[]) {
                         Image out (image.first, grayify (image.second));
                         write_image ("gray", out);
                         return out;
+                    });
+
+#ifdef RESIZE
+    std::cout << "Calculating gray scale" << std::endl;
+    std::vector <Image> gray_scales_x1;
+    std::transform (gray_scales.begin(), gray_scales.end(), std::back_inserter (gray_scales_x1),
+                    [] (Image const & image) -> Image {
+                        Image out (image.first, grayify (image.second));
+                        write_image ("gray_x1", out);
+                        return out;
     });
+#endif
 
 #ifdef CONVOLUTE
     std::cout << "Convoluting gray scales with 3x3 1's" << std::endl;
@@ -100,7 +111,7 @@ int main (int argc, char * argv[]) {
                     [] (Image const & image) -> Image {
                         auto img = image.second;
                         for (int i = 0; i < 40; i++) {
-                            img = convolute_gray (img, Mat (3, 3, CV_8UC1, 1));
+                            img = convolute_gray (img, Mat({1,0,1, 0,0,0, 1,0,1}).reshape (3));
                         }
                         Image out (image.first, img);
                         write_image ("convoluted_41x41", out);
