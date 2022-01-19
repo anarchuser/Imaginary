@@ -17,7 +17,14 @@ cv::Mat convolute_gray (cv::Mat const & original, cv::Mat const & kernel) {
 
     LOG_ASSERT (kernel.cols % 2 && kernel.rows % 2);
 
-    int kernel_area = kernel.cols * kernel.rows;
+    int kernel_sum = 0;
+    for (int y = 0; y < kernel.rows; y++) {
+        auto kernel_row = kernel.ptr <unsigned char> (y);
+        for (int x = 0; x < kernel.cols; x++) {
+            kernel_sum += kernel_row [x];
+        }
+    }
+
     for (int y = 0; y < modified.rows; y++) {
         auto mod_row = modified.ptr <double> (y);
 
@@ -30,7 +37,7 @@ cv::Mat convolute_gray (cv::Mat const & original, cv::Mat const & kernel) {
                            : original.at <double> (y, x) * kernel.at <unsigned char> (kernel.rows / 2, kernel.cols / 2);
                 }
             }
-            mod_row [x] = sum / kernel_area;
+            mod_row [x] = sum / kernel_sum;
         }
     }
     return modified;
