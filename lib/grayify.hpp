@@ -10,7 +10,6 @@
 
 #include "config.h"
 
-// TODO: replace 3 color channels with 1 average channel
 cv::Mat grayify (cv::Mat const & src) {
     cv::Mat dest (src.rows, src.cols, CV_64FC1);
 
