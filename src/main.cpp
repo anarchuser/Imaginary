@@ -24,6 +24,7 @@
 #include "grayify.hpp"
 #include "multiply.hpp"
 #include "convolute.hpp"
+#include "resize.hpp"
 
 #include "io.hpp"
 
@@ -76,14 +77,31 @@ int main (int argc, char * argv[]) {
                     });
 
 #ifdef RESIZE
-    std::cout << "Calculating gray scale" << std::endl;
+    std::cout << "Calculating gray scale x1" << std::endl;
     std::vector <Image> gray_scales_x1;
     std::transform (gray_scales.begin(), gray_scales.end(), std::back_inserter (gray_scales_x1),
                     [] (Image const & image) -> Image {
-                        Image out (image.first, grayify (image.second));
+                        Image out (image.first, resize_gray (image.second, image.second.clone()));
                         write_image ("gray_x1", out);
                         return out;
     });
+
+    std::cout << "Calculating gray scale x2" << std::endl;
+    std::vector <Image> gray_scales_x2;
+    std::transform (gray_scales.begin(), gray_scales.end(), std::back_inserter (gray_scales_x2),
+                    [] (Image const & image) -> Image {
+                        Image out (image.first, resize_gray (image.second, cv::Mat (image.second.rows * 2, image.second.cols * 2, CV_64FC1)));
+                        write_image ("gray_x2", out);
+                        return out;
+                    });
+    std::cout << "Calculating gray scale x3" << std::endl;
+    std::vector <Image> gray_scales_x3;
+    std::transform (gray_scales.begin(), gray_scales.end(), std::back_inserter (gray_scales_x3),
+                    [] (Image const & image) -> Image {
+                        Image out (image.first, resize_gray (image.second, cv::Mat (image.second.rows * 3, image.second.cols * 3, CV_64FC1)));
+                        write_image ("gray_x3", out);
+                        return out;
+                    });
 #endif
 
 #ifdef CONVOLUTE
@@ -140,5 +158,13 @@ int main (int argc, char * argv[]) {
     });
 #endif
 #endif
+#endif
+
+#ifdef RANDOM
+    std::cout << "Constructing random images" << std::endl;
+    cv::Mat random (500, 800, CV_64FC1);
+    randu(random, cv::Scalar::all(0), cv::Scalar::all(255));
+    write_image ("random", Image ("random.png", random));
+
 #endif
 }

@@ -4,7 +4,7 @@
 
 TEST_CASE ("Resizing x1 clones") {
     cv::Mat src (10, 20, CV_64FC1);
-    randu(src, cv::Scalar::all(0), cv::Scalar::all(1));
+    randu(src, cv::Scalar::all(0), cv::Scalar::all(255));
     auto dest = resize_gray (src, cv::Mat (10, 20, CV_64FC1));
 
     for (int y = 0; y < src.rows; y++) {
