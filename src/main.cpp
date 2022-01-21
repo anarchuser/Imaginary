@@ -44,6 +44,60 @@ int main (int argc, char * argv[]) {
         write_image ("original", original);
     }
 
+#ifdef CONVOLUTE
+    std::cout << "Convoluting gray scales with 3x3 1's" << std::endl;
+    std::vector <Image> convoluted_3x3;
+    std::transform (originals.begin(), originals.end(), std::back_inserter (convoluted_3x3),
+                    [] (Image const & image) -> Image {
+                        auto img = convolute (image.second, Mat (3, 3, CV_8UC1, 1));
+                        Image out (image.first, img);
+                        write_image ("convoluted/1's/3x3", out);
+                        return out;
+                    });
+    std::cout << "Convoluting gray scales with 7x7 1's" << std::endl;
+    std::vector <Image> convoluted_7x7;
+    std::transform (originals.begin(), originals.end(), std::back_inserter (convoluted_7x7),
+                    [] (Image const & image) -> Image {
+                        auto img = convolute (image.second, Mat (7, 7, CV_8UC1, 1));
+                        Image out (image.first, img);
+                        write_image ("convoluted/1's/7x7", out);
+                        return out;
+                    });
+    std::cout << "Convoluting gray scales with 5x5 Gaussian" << std::endl;
+    std::vector <Image> convoluted_5x5_gaussian;
+    std::transform (originals.begin(), originals.end(), std::back_inserter (convoluted_5x5_gaussian),
+                    [] (Image const & image) -> Image {
+                        Image out (image.first, convolute (image.second, Mat_<unsigned char> ({
+                                1,  4,  7,  4, 1,
+                                4, 16, 26, 16, 4,
+                                7, 26, 41, 26, 7,
+                                4, 16, 26, 16, 4,
+                                1,  4,  7,  4, 1
+                        }).reshape (5)));
+                        write_image ("convoluted/gaussian/5x5", out);
+                        return out;
+                    });
+    std::cout << "Convoluting gray scales with 5x5 Gaussian (40 times)" << std::endl;
+    std::vector <Image> convoluted_5x5_40x_gaussian;
+    std::transform (originals.begin(), originals.end(), std::back_inserter (convoluted_5x5_40x_gaussian),
+                    [] (Image const & image) -> Image {
+                        auto gauss = Mat_<unsigned char> ({
+                                1,  4,  7,  4, 1,
+                                4, 16, 26, 16, 4,
+                                7, 26, 41, 26, 7,
+                                4, 16, 26, 16, 4,
+                                1,  4,  7,  4, 1
+                        }).reshape (5);
+                        Mat img = image.second;
+                        for (int i = 0; i < 40; i++) {
+                            img = convolute (img, gauss);
+                        }
+                        Image out (image.first, img);
+                        write_image ("convoluted/gaussian/5x5_x40", out);
+                        return out;
+                    });
+#endif
+
 #ifdef MULTIPLY_x2
     std::cout << "Calculating originals x2" << std::endl;
     std::vector <Image> originals_2;
