@@ -39,23 +39,29 @@ void init_out () {
 }
 
 void write_image (std::string const & relative_path, std::pair <std::string, cv::Mat> const & image) {
-    fs::path folder = IMG_OUT / relative_path;
-    fs::create_directories (folder);
-    LOG_ASSERT (fs::exists (folder));
-    LOG_ASSERT (! fs::exists (folder / image.first));
-    cv::imwrite (folder / image.first, image.second);
-    LOG_ASSERT (fs::exists (folder / image.first));
+    // Save each modified image sorted by the path given
+    fs::path parent = IMG_OUT / relative_path;
+    fs::path path = parent / image.first;
+    fs::create_directories (parent);
+    LOG_ASSERT (fs::exists (parent));
+    LOG_ASSERT (! fs::exists (path));
+    cv::imwrite (path, image.second);
+    LOG_ASSERT (fs::exists (path));
 
-    fs::path sym_folder = IMG_OUT / image.first;
-    fs::create_directories (sym_folder);
-    LOG_ASSERT (fs::exists (sym_folder));
-    LOG_ASSERT (! fs::exists (sym_folder / relative_path));
+    // Create sym links or duplicate images sorted by input image name
+    fs::path sym_path = (IMG_OUT / image.first / relative_path) += fs::path (image.first).extension();
+    fs::path sym_parent = sym_path.parent_path();
+
+    fs::create_directories (sym_parent);
+    LOG_ASSERT (fs::exists (sym_parent));
+
+    LOG_ASSERT (! fs::exists (sym_path));
 #ifdef NO_SYMLINK
-    cv::imwrite (sym_folder / relative_path, image.second);
+    cv::imwrite (sym_path, image.second);
 #else
-    fs::create_symlink (folder / image.first, sym_folder / relative_path);
+    fs::create_symlink (folder / image.first, sym_path);
 #endif
-    LOG_ASSERT (fs::exists (sym_folder / relative_path));
+    LOG_ASSERT (fs::exists (sym_path));
 }
 
 #endif //IMAGINARY_IO_HPP

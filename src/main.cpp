@@ -50,7 +50,7 @@ int main (int argc, char * argv[]) {
     std::transform (originals.begin(), originals.end(), std::back_inserter (originals_2),
                     [] (Image const & image) -> Image {
                         Image out (image.first, twice (image.second));
-                        write_image ("original_2", out);
+                        write_image ("original/x2", out);
                         return out;
     });
 
@@ -60,7 +60,7 @@ int main (int argc, char * argv[]) {
     std::transform (originals_2.begin(), originals_2.end(), std::back_inserter (originals_16),
                     [] (Image const & image) -> Image {
                         Image out (image.first, twice (twice (twice (image.second))));
-                        write_image ("original_16", out);
+                        write_image ("original/x16", out);
                         return out;
     });
 #endif
@@ -82,7 +82,7 @@ int main (int argc, char * argv[]) {
     std::transform (gray_scales.begin(), gray_scales.end(), std::back_inserter (gray_scales_x1),
                     [] (Image const & image) -> Image {
                         Image out (image.first, resize_gray (image.second, image.second.clone()));
-                        write_image ("gray_x1", out);
+                        write_image ("gray/resize/x1", out);
                         return out;
     });
 
@@ -91,7 +91,7 @@ int main (int argc, char * argv[]) {
     std::transform (gray_scales.begin(), gray_scales.end(), std::back_inserter (gray_scales_x2),
                     [] (Image const & image) -> Image {
                         Image out (image.first, resize_gray (image.second, cv::Mat (image.second.rows * 2, image.second.cols * 2, CV_64FC1)));
-                        write_image ("gray_x2", out);
+                        write_image ("gray/resize/x2", out);
                         return out;
                     });
     std::cout << "Calculating gray scale x3" << std::endl;
@@ -99,7 +99,7 @@ int main (int argc, char * argv[]) {
     std::transform (gray_scales.begin(), gray_scales.end(), std::back_inserter (gray_scales_x3),
                     [] (Image const & image) -> Image {
                         Image out (image.first, resize_gray (image.second, cv::Mat (image.second.rows * 3, image.second.cols * 3, CV_64FC1)));
-                        write_image ("gray_x3", out);
+                        write_image ("gray/resize/x3", out);
                         return out;
                     });
 #endif
@@ -111,7 +111,7 @@ int main (int argc, char * argv[]) {
                     [] (Image const & image) -> Image {
                         auto img = convolute_gray (image.second, Mat (3, 3, CV_8UC1, 1));
                         Image out (image.first, img);
-                        write_image ("convoluted_3x3_1", out);
+                        write_image ("gray/convoluted/1's/3x3", out);
                         return out;
                     });
     std::cout << "Convoluting gray scales with 7x7 1's" << std::endl;
@@ -120,19 +120,21 @@ int main (int argc, char * argv[]) {
                     [] (Image const & image) -> Image {
                         auto img = convolute_gray (image.second, Mat (7, 7, CV_8UC1, 1));
                         Image out (image.first, img);
-                        write_image ("convoluted_7x7_1", out);
+                        write_image ("gray/convoluted/1's/7x7", out);
                         return out;
                     });
-    std::cout << "Convoluting gray scales with 41x41 1's" << std::endl;
-    std::vector <Image> convoluted_41x41_gray;
-    std::transform (gray_scales.begin(), gray_scales.end(), std::back_inserter (convoluted_41x41_gray),
+    std::cout << "Convoluting gray scales with 5x5 Gaussian" << std::endl;
+    std::vector <Image> convoluted_5x5_gaussian_gray;
+    std::transform (gray_scales.begin(), gray_scales.end(), std::back_inserter (convoluted_5x5_gaussian_gray),
                     [] (Image const & image) -> Image {
-                        auto img = image.second;
-                        for (int i = 0; i < 40; i++) {
-                            img = convolute_gray (img, Mat({1,0,1, 0,0,0, 1,0,1}).reshape (3));
-                        }
-                        Image out (image.first, img);
-                        write_image ("convoluted_41x41", out);
+                        Image out (image.first, convolute_gray (image.second, Mat({
+                            1,  4,  7,  4, 1,
+                            4, 16, 26, 16, 4,
+                            7, 26, 41, 26, 7,
+                            4, 16, 26, 16, 4,
+                            1,  4,  7,  4, 1,
+                        }).reshape (5)));
+                        write_image ("gray/convoluted/gaussian/5x5", out);
                         return out;
                     });
 #endif
@@ -143,7 +145,7 @@ int main (int argc, char * argv[]) {
     std::transform (gray_scales.begin(), gray_scales.end(), std::back_inserter (gray_scales_2),
                     [] (Image const & image) -> Image {
                         Image out (image.first, twice_gray (image.second));
-                        write_image ("gray_2", out);
+                        write_image ("gray/x2", out);
                         return out;
     });
 
@@ -153,7 +155,7 @@ int main (int argc, char * argv[]) {
     std::transform (gray_scales_2.begin(), gray_scales_2.end(), std::back_inserter (gray_scales_16),
                     [] (Image const & image) -> Image {
                         Image out (image.first, twice_gray (twice_gray (twice_gray (image.second))));
-                        write_image ("gray_16", out);
+                        write_image ("gray/x16", out);
                         return out;
     });
 #endif
