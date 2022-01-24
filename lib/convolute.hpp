@@ -58,7 +58,7 @@ cv::Mat convolute_gray (cv::Mat const & original, cv::Mat const & kernel) {
 
         for (int x = 0; x < modified.cols; x++) {
             double sum = 0;
-            unsigned int kernel_sum = 0;
+            double kernel_sum = 0;
             for (int j = - kernel.rows / 2; j <= kernel.rows / 2; j++) {
                 for (int i = - kernel.cols / 2; i <= kernel.cols / 2; i++) {
                     kernel_sum += ( within_bounds (original, x + i, y + j) )
