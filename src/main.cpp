@@ -48,7 +48,8 @@ int main (int argc, char * argv[]) {
     std::vector <Image> modified;
     {
         auto apply = [& originals, & modified] (Image lambda (Image const &)) {
-            std::transform (originals.begin (), originals.end (), std::back_inserter (modified), lambda);
+//            std::transform (originals.begin (), originals.end (), std::back_inserter (modified), lambda);
+            std::for_each (originals.begin (), originals.end (), lambda);
         };
         LOG (INFO) << "convolute_1s, 3";
         APPLY (convolute_1s_l, 3);
@@ -66,10 +67,10 @@ int main (int argc, char * argv[]) {
         APPLY (double_l, 1);
         LOG (INFO) << "double, 2";
         APPLY (double_l, 2);
-//        LOG (INFO) << "double, 3";
-//        APPLY (double_l, 3);
-//        LOG (INFO) << "double, 4";
-//        APPLY (double_l, 4);
+        LOG (INFO) << "double, 3";
+        APPLY (double_l, 3);
+        LOG (INFO) << "double, 4";
+        APPLY (double_l, 4);
     }
 
     LOG (INFO) << "Apply operations to original images";
@@ -94,13 +95,13 @@ int main (int argc, char * argv[]) {
         APPLY (gray_double_l, 1);
         LOG (INFO) << "gray_double, 2";
         APPLY (gray_double_l, 2);
-//        LOG (INFO) << "gray_double, 3";
-//        APPLY (gray_double_l, 3);
-//        LOG (INFO) << "gray_double, 4";
+        LOG (INFO) << "gray_double, 3";
+        APPLY (gray_double_l, 3);
+        LOG (INFO) << "gray_double, 4";
         APPLY (gray_double_l, 4);
-        LOG (INFO) << "gray_double, 1.0";
+        LOG (INFO) << "gray_resize, 1.0";
         APPLY (gray_resize_l, 1.0);
-        LOG (INFO) << "gray_double, 2.0";
+        LOG (INFO) << "gray_resize, 2.0";
         APPLY (gray_resize_l, 2.0);
     }
 
