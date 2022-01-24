@@ -15,6 +15,10 @@ struct Color_BGR {
     unsigned char & operator [] (unsigned int index) { return value[index]; }
     unsigned char operator [] (unsigned int index) const { return value[index]; }
 
+    std::ostream & operator << (std::ostream & os) const {
+        return os << (short) blue() << " - " << (short) green() << " - " << (short) red();
+    }
+
     [[nodiscard]] unsigned int sum() const { return value [0] + value [1] + value [2]; }
     [[nodiscard]] double average() const { return (double) sum() / 3; }
 };

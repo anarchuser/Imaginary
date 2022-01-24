@@ -26,4 +26,4 @@ test:	build
 
 # Clean all build files
 clean:
-	rm -r $(BUILD_DIR)
+	rm -rf $(BUILD_DIR)

@@ -31,13 +31,7 @@ fs::path const IMG_OUT = PROJECT_ROOT "/out";
 
 #define NO_SYMLINK
 
-#define CONVOLUTE
-#define GAUSSIAN
-//#define MULTIPLY_x2
-//#define MULTIPLY_x16
-//#define GRAYIFY
-//#define RESIZE
-//#define RANDOM
+#define RANDOM
 
 #endif //Imaginary_CONFIG_H
 

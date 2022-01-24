@@ -14,7 +14,7 @@ std::vector <std::pair <std::string, cv::Mat>> read_images (int argc, char * arg
     for (std::size_t i = 0; i < argc; i++) {
         auto image = cv::imread (argv [i]);
         if (image.empty ()) continue;
-        std::cout << argv [i] << ":\t" << image.rows << 'x' << image.cols << std::endl;
+        std::cout << '\t' << argv [i] << ":\t" << image.rows << 'x' << image.cols << std::endl;
         originals.emplace_back (fs::path (argv [i]).filename(), std::move (image));
     }
 
@@ -23,7 +23,7 @@ std::vector <std::pair <std::string, cv::Mat>> read_images (int argc, char * arg
     for (auto const & file : fs::directory_iterator (IMG_IN)) {
         auto image = cv::imread (file.path());
         if (image.empty ()) continue;
-        std::cout << file.path() << ":\t" << image.rows << 'x' << image.cols << std::endl;
+        std::cout << '\t' << file.path() << ":\t" << image.rows << 'x' << image.cols << std::endl;
         originals.emplace_back (fs::path (file).filename(), std::move (image));
     }
     return originals;
