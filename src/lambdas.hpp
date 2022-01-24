@@ -63,7 +63,7 @@ static auto const gray_resize_l = [] (Image const & image, double factor) -> Ima
 
 static auto const gray_convolute_1s_l = [] (Image const & image, int size) -> Image {
     auto kernel = Mat (size, size, CV_64FC1, 1);
-    auto convoluted = convolute (image.second, kernel);
+    auto convoluted = convolute_gray (image.second, kernel);
     auto out = Image (image.first, convoluted);
     write_image (std::string ("convoluted/1's/") + square_string (size), out);
     return out;
@@ -71,7 +71,7 @@ static auto const gray_convolute_1s_l = [] (Image const & image, int size) -> Im
 
 static auto const gray_convolute_gaussian_l = [] (Image const & image, int size) -> Image {
     auto kernel = cv::getGaussianKernel (size * size, 1, CV_64F).reshape (1, size);
-    auto convoluted = convolute (image.second, kernel);
+    auto convoluted = convolute_gray (image.second, kernel);
     auto out = Image (image.first, convoluted);
     write_image (std::string ("convoluted/gaussian/") + square_string (size), out);
     return out;
@@ -80,7 +80,7 @@ static auto const gray_convolute_gaussian_l = [] (Image const & image, int size)
 static auto const gray_double_l = [] (Image const & image, int iterations) -> Image {
     auto multiplied = image.second;
     for (int i = 0; i < iterations; i++)
-        multiplied = twice (multiplied);
+        multiplied = twice_gray (multiplied);
     auto out = Image (image.first, multiplied);
     write_image (std::string ("gray/") + std::to_string ((int) std::pow (2, iterations)), out);
     return out;
