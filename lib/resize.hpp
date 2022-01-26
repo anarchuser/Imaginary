@@ -18,11 +18,16 @@ double average_gray (cv::Mat const & src, cv::Rect2d precise_area) {
                              std::min (int (std::ceil (pa.x + pa.width)  - std::floor (pa.x)), src.cols - int (pa.x)),
                              std::min (int (std::ceil (pa.y + pa.height) - std::floor (pa.y)), src.rows - int (pa.y)));
     auto const & ra = rounded_area;
+    // Trivial case: section covers 1 pixel only => return that one pixel
+    if (ra.area() == 1) {
+        return src.at <double> (ra.y, ra.x);
+    }
+    
     cv::Mat section (src, rounded_area);
     double sum = 0.0;
-
-    // Simple case: (1) section covers 1 pixel only, or (2) section fits without rounding
-    if ((pa.x == ra.x && pa.y == ra.y && pa.width == ra.width && pa.height == ra.height) || ra.area() == 1) {
+    
+    // Simple case: Section fits without rounding (section borders align to grid
+    if (pa.x == ra.x && pa.y == ra.y && pa.width == ra.width && pa.height == ra.height) {
         for (int y = 0; y < section.rows; y++) {
             auto row = section.ptr <double> (y);
             for (int x = 0; x < section.cols; x++) {
@@ -31,7 +36,9 @@ double average_gray (cv::Mat const & src, cv::Rect2d precise_area) {
         }
         return sum / rounded_area.area();
     }
-
+    
+    // Complex case: Weighted rectangle needed
+    
 
     return sum / precise_area.area();
 }
