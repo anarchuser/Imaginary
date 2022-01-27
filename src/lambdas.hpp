@@ -67,6 +67,14 @@ static auto const gray_resize_l = [] (Image const & image, double factor) -> Ima
     return out;
 };
 
+static auto const gray_resize_dims_l = [] (Image const & image, int width, int height) -> Image {
+    auto resized = resize_gray (image.second, cv::Mat (width, height, CV_64FC1));
+    auto out = Image (image.first, resized);
+    LOG (INFO) << "Gray '" << image.first << "'\tresized to dimensions " << width << "x" << height << ": " << deviation_gray (image.second, out.second);
+    write_image (std::string ("gray/resize/") + std::to_string (height) + 'x' + std::to_string (width), out);
+    return out;
+};
+
 static auto const gray_convolute_1s_l = [] (Image const & image, int size) -> Image {
     auto kernel = Mat (size, size, CV_64FC1, 1);
     auto convoluted = convolute_gray (image.second, kernel);

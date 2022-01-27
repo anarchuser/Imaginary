@@ -14,7 +14,7 @@ std::vector <std::pair <std::string, cv::Mat>> read_images (int argc, char * arg
     for (std::size_t i = 0; i < argc; i++) {
         auto image = cv::imread (argv [i]);
         if (image.empty ()) continue;
-        std::cout << '\t' << argv [i] << ":\t" << image.rows << 'x' << image.cols << std::endl;
+        std::cout << '\t' << argv [i] << ":\t" << image.cols << 'x' << image.rows << std::endl;
         originals.emplace_back (fs::path (argv [i]).filename(), std::move (image));
     }
 
