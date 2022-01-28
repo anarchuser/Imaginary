@@ -45,10 +45,8 @@ int main (int argc, char * argv[]) {
     std::transform (originals.begin(), originals.end(), std::back_inserter (gray_scales), grayify_l);
 
     LOG (INFO) << "Apply operations to original images";
-    std::vector <Image> modified;
     {
-        auto apply = [& originals, & modified] (Image lambda (Image const &)) {
-//            std::transform (originals.begin (), originals.end (), std::back_inserter (modified), lambda);
+        auto apply = [& originals] (Image lambda (Image const &)) {
             std::for_each (originals.begin (), originals.end (), lambda);
         };
 //        LOG (INFO) << "convolute_1s, 3";
@@ -73,11 +71,10 @@ int main (int argc, char * argv[]) {
 //        APPLY (double_l, 4);
     }
 
-    LOG (INFO) << "Apply operations to original images";
-    std::vector <Image> gray_modified;
+    LOG (INFO) << "Apply operations to gray images";
     {
-        auto apply = [& gray_scales, & gray_modified] (Image lambda (Image const &)) {
-            std::transform (gray_scales.begin (), gray_scales.end (), std::back_inserter (gray_modified), lambda);
+        auto apply = [& gray_scales] (Image lambda (Image const &)) {
+            std::for_each (gray_scales.begin (), gray_scales.end (), lambda);
         };
 //        LOG (INFO) << "gray_convolute_1s, 3";
 //        APPLY (gray_convolute_1s_l, 3);
@@ -130,10 +127,20 @@ int main (int argc, char * argv[]) {
 //                });
 //            }
 //        }
+
+#ifdef CONVOLUTE
+    LOG (INFO) << "Constructing Gaussian Kernels from size 1² to 35²";
+    fs::create_directories (IMG_OUT / "gaussian");
+    for (int size = 1; size <= 21; size += 2) {
+        LOG (INFO) << "Gaussian kernel " << square_string (size);
+        auto gaussian = cv::getGaussianKernel (size * size, 10, CV_64F).reshape (1, size);
+        std::cout << gaussian << std::endl << std::endl;
+        cv::imwrite (IMG_OUT / "gaussian" / (square_string (size) + ".jpg"), gaussian);
     }
+#endif
 
 #ifdef RANDOM
-    LOG (INFO) << "Constructing random images" << std::endl;
+    LOG (INFO) << "Constructing random images";
     cv::Mat random (500, 800, CV_64FC1);
     randu(random, cv::Scalar::all(0), cv::Scalar::all(255));
     write_image ("random", Image ("random.png", random));
