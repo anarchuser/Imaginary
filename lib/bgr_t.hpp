@@ -1,26 +1,26 @@
 #ifndef IMAGINARY_BGR_T_HPP
 #define IMAGINARY_BGR_T_HPP
 
+#include <iostream>
+
 struct Color_BGR {
     unsigned char value[3];
 
-    unsigned char & blue() { return value[0]; };
-    unsigned char & green() { return value[1]; };
-    unsigned char & red() { return value[2]; };
+    unsigned char & blue();
+    unsigned char & green();
+    unsigned char & red();
 
-    [[nodiscard]] unsigned char blue() const { return value[0]; };
-    [[nodiscard]] unsigned char green() const { return value[1]; };
-    [[nodiscard]] unsigned char red() const { return value[2]; };
+    [[nodiscard]] unsigned char blue() const;
+    [[nodiscard]] unsigned char green() const;
+    [[nodiscard]] unsigned char red() const;
 
-    unsigned char & operator [] (unsigned int index) { return value[index]; }
-    unsigned char operator [] (unsigned int index) const { return value[index]; }
+    unsigned char & operator [] (unsigned int index);
+    unsigned char operator [] (unsigned int index) const;
 
-    std::ostream & operator << (std::ostream & os) const {
-        return os << (short) blue() << " - " << (short) green() << " - " << (short) red();
-    }
+    std::ostream & operator << (std::ostream & os) const;
 
-    [[nodiscard]] unsigned int sum() const { return value [0] + value [1] + value [2]; }
-    [[nodiscard]] double average() const { return (double) sum() / 3; }
+    [[nodiscard]] unsigned int sum() const;
+    [[nodiscard]] double average() const;
 };
 
 #endif //IMAGINARY_BGR_T_HPP

@@ -127,6 +127,7 @@ int main (int argc, char * argv[]) {
 //                });
 //            }
 //        }
+    }
 
 #ifdef CONVOLUTE
     LOG (INFO) << "Constructing Gaussian Kernels from size 1² to 35²";
