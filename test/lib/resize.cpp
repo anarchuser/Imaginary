@@ -22,7 +22,7 @@ TEST_CASE ("Gray resizing works for factor 2.0/0.5") {
     randu(src, cv::Scalar::all(0), cv::Scalar::all(255));
     auto dest = resize_gray (resize_gray (src, cv::Mat (200, 200, CV_64FC1)), cv::Mat (100, 100, CV_64FC1));
 
-    auto dev = deviation (src, dest);
+    auto dev = deviation_gray (src, dest);
     REQUIRE (dev.first == 0);
     REQUIRE (dev.second == 0);
 }
@@ -32,7 +32,7 @@ TEST_CASE ("Gray resizing works for factor 2.0 without resizing back") {
     randu(src, cv::Scalar::all(0), cv::Scalar::all(255));
     auto dest = resize_gray (src, cv::Mat (200, 200, CV_64FC1));
 
-    auto dev = deviation (src, dest);
+    auto dev = deviation_gray (src, dest);
     REQUIRE (dev.first == 0);
     REQUIRE (dev.second == 0);
 }
