@@ -42,6 +42,9 @@ void write_image (std::string const & relative_path, std::pair <std::string, cv:
     // Save each modified image sorted by the path given
     fs::path parent = IMG_OUT / relative_path;
     fs::path path = parent / image.first;
+
+    LOG (INFO) << "Writing image " << path;
+
     fs::create_directories (parent);
     LOG_ASSERT (fs::exists (parent));
     LOG_ASSERT (! fs::exists (path));
@@ -51,6 +54,8 @@ void write_image (std::string const & relative_path, std::pair <std::string, cv:
     // Create sym links or duplicate images sorted by input image name
     fs::path sym_path = (IMG_OUT / image.first / relative_path) += fs::path (image.first).extension();
     fs::path sym_parent = sym_path.parent_path();
+
+    LOG (INFO) << "Writing image " << sym_path;
 
     fs::create_directories (sym_parent);
     LOG_ASSERT (fs::exists (sym_parent));
