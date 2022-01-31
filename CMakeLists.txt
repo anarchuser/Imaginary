@@ -23,7 +23,7 @@ add_executable(Imaginary ${PROJECT_SOURCE_DIR}/src/main.cpp ${PROJECT_SOURCE_DIR
 add_compile_definitions(Imaginary PROJECT_ROOT="${PROJECT_SOURCE_DIR}")
 
 include_directories(${PROJECT_SOURCE_DIR}/)
-include_directories(${PROJECT_SOURCE_DIR}/lib/)
+include_directories(${PROJECT_SOURCE_DIR}/include/)
 include_directories(${PROJECT_SOURCE_DIR}/src/)
 include_directories(${PROJECT_SOURCE_DIR}/test/)
 
