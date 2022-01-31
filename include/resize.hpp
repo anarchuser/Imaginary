@@ -7,7 +7,12 @@
 
 #include "config.h"
 
+#include "math.hpp"
+
 cv::Mat resize (cv::Mat const & src, cv::Mat && dest);
+
+double lower_weight (double val);
+double upper_weight (double val);
 
 double average_gray (cv::Mat const & src, cv::Rect2d precise_area);
 

@@ -111,22 +111,22 @@ int main (int argc, char * argv[]) {
 //        APPLY (gray_resize_l, 2.0);
 //        LOG (INFO) << "gray_resize, 2.5";
 //        APPLY (gray_resize_l, 2.5);
-//        LOG (INFO) << "gray_resize, 1.1";
-//        APPLY (gray_resize_l, 1.1);
-        for (double d = 1.1; d < 10.1; d += 0.1) {
+//        LOG (INFO) << "gray_resize, 1.7";
+//        APPLY (gray_resize_l, 1.7);
+        for (double d = 1.1; d <= 10.0; d += 0.1) {
             LOG (INFO) << "gray_resize, " << d;
             std::for_each (gray_scales.begin (), gray_scales.end (), [d](Image const & image) {
                 return gray_resize_l (image, d);
             });
         }
-//        for (int y = 100; y < 4500; y += 100) {
-//            for (int x = 100; x < 2500; x += 100) {
-//                LOG (INFO) << "gray_resize, " << x  << 'x' << y;
-//                std::for_each (gray_scales.begin (), gray_scales.end (), [x, y](Image const & image) {
-//                    return gray_resize_dims_l (image, x, y);
-//                });
-//            }
-//        }
+        for (int y = 100; y < 4500; y += 100) {
+            for (int x = 100; x < 2500; x += 100) {
+                LOG (INFO) << "gray_resize, " << x  << 'x' << y;
+                std::for_each (gray_scales.begin (), gray_scales.end (), [x, y](Image const & image) {
+                    return gray_resize_dims_l (image, x, y);
+                });
+            }
+        }
     }
 
 #ifdef CONVOLUTE
