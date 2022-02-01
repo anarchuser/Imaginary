@@ -20,6 +20,7 @@
 #endif
 
 #include <opencv2/opencv.hpp>
+using Image = std::pair <std::string, cv::Mat>;
 
 #include <filesystem>
 

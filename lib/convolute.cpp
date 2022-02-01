@@ -32,10 +32,11 @@ cv::Mat convolute (cv::Mat const & original, cv::Mat const & kernel) {
                     }
                 }
             }
-            mod_row [x].red()   = (red   / kernel_sum);
-            mod_row [x].green() = (green / kernel_sum);
-            mod_row [x].blue()  = (blue  / kernel_sum);
+            mod_row [x].red()   = (red   / (kernel_sum ?: 1));
+            mod_row [x].green() = (green / (kernel_sum ?: 1));
+            mod_row [x].blue()  = (blue  / (kernel_sum ?: 1));
         }
+        std::cout << std::endl;
     }
     return modified;
 }
@@ -61,8 +62,11 @@ cv::Mat convolute_gray (cv::Mat const & original, cv::Mat const & kernel) {
                            : original.at <double> (y, x) * kernel.at <double> (kernel.rows / 2, kernel.cols / 2);
                 }
             }
-            mod_row [x] = sum / kernel_sum;
+            std::cout << "sum: " << sum << ", kernel_sum: " << kernel_sum << std::endl;
+            mod_row [x] = sum;
+            while (1);
         }
+        std::cout << std::endl;
     }
     return modified;
 }

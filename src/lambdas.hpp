@@ -16,10 +16,7 @@
 
 #define APPLY(function, val) apply ([](Image const & image) { return function (image, val); })
 
-using namespace cv;
 namespace fs = std::filesystem;
-
-using Image = std::pair <std::string, Mat>;
 
 std::string square_string (int size) {
     auto out = std::to_string (size);
@@ -27,7 +24,7 @@ std::string square_string (int size) {
 }
 
 static auto const convolute_1s_l = [] (Image const & image, int size) -> Image {
-    auto kernel = Mat (size, size, CV_64FC1, 1);
+    auto kernel = cv::Mat (size, size, CV_64FC1, 1);
     auto convoluted = convolute (image.second, kernel);
     auto out = Image (image.first, convoluted);
     LOG (INFO) << "Original '" << image.first << "'\tconvoluted with " << square_string (size) << " matrix filled with 1's: " << deviation (image.second, out.second);
@@ -93,7 +90,7 @@ static auto const gray_resize_dims_l = [] (Image const & image, int width, int h
 };
 
 static auto const gray_convolute_1s_l = [] (Image const & image, int size) -> Image {
-    auto kernel = Mat (size, size, CV_64FC1, 1);
+    auto kernel = cv::Mat (size, size, CV_64FC1, 1);
     auto convoluted = convolute_gray (image.second, kernel);
     auto out = Image (image.first, convoluted);
     LOG (INFO) << "Gray '" << image.first << "'\tconvoluted with " << square_string (size) << " matrix filled with 1's: " << deviation_gray (image.second, out.second);
@@ -117,6 +114,13 @@ static auto const gray_double_l = [] (Image const & image, int iterations) -> Im
     auto out = Image (image.first, multiplied);
     LOG (INFO) << "Gray '" << image.first << "'\tdoubled " << iterations << " times: " << deviation_gray (image.second, out.second);
     write_image (std::string ("gray/") + std::to_string ((int) std::pow (2, iterations)), out);
+    return out;
+};
+
+static auto const canny_l = [] (Image const & image, void * _) {
+    auto out = Image (image.first, canny (image.second));
+    LOG (INFO) << "Apply canny edge detection to '" << image.first << "'" << std::endl;
+    write_image (std::string ("canny/output"), out);
     return out;
 };
 

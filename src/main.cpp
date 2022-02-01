@@ -79,6 +79,8 @@ int main (int argc, char * argv[]) {
 //        APPLY (resize_l, 2.3);
 //        LOG (INFO) << "resize_dims, 401 x 809";
 //        apply ([](Image const & image) { return resize_dims_l (image, 809, 401); });
+        LOG (INFO) << "canny edge detection" << std::endl;
+        APPLY (canny_l, nullptr);
     }
 
 #ifdef GRAYIFY
