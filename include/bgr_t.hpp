@@ -16,7 +16,10 @@ struct Color_BGR {
 
     unsigned char & operator [] (unsigned int index);
     unsigned char operator [] (unsigned int index) const;
-
+    
+    Color_BGR operator / (double divisor) const;
+    Color_BGR & operator /= (double divisor);
+    
     std::ostream & operator << (std::ostream & os) const;
 
     [[nodiscard]] unsigned int sum() const;

@@ -69,8 +69,19 @@ int main (int argc, char * argv[]) {
         APPLY (double_l, 3);
         LOG (INFO) << "double, 4";
         APPLY (double_l, 4);
+        LOG (INFO) << "resize, 0.4";
+        APPLY (resize_l, 0.4);
+        LOG (INFO) << "resize, 1.5";
+        APPLY (resize_l, 1.5);
+        LOG (INFO) << "resize, 1.7";
+        APPLY (resize_l, 1.7);
+        LOG (INFO) << "resize, 2.3";
+        APPLY (resize_l, 2.3);
+        LOG (INFO) << "resize_dims, 401 x 809";
+        apply ([](Image const & image) { return resize_dims_l (image, 809, 401); });
     }
 
+#ifdef GRAYIFY
     LOG (INFO) << "Apply operations to gray images";
     {
         auto apply = [& gray_scales] (Image lambda (Image const &)) {
@@ -105,8 +116,9 @@ int main (int argc, char * argv[]) {
         LOG (INFO) << "gray_resize, 2.3";
         APPLY (gray_resize_l, 2.3);
         LOG (INFO) << "gray_resize_dims, 401 x 809";
-        apply ([](Image const & image) { return gray_resize_dims_l (image, 401, 809); });
+        apply ([](Image const & image) { return gray_resize_dims_l (image, 809, 401); });
     }
+#endif
 
 #ifdef CONVOLUTE
     LOG (INFO) << "Constructing Gaussian Kernels from size 1² to 35²";

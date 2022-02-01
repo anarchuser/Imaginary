@@ -53,6 +53,22 @@ static auto const double_l = [] (Image const & image, int iterations) -> Image {
     return out;
 };
 
+static auto const resize_l = [] (Image const & image, double factor) -> Image {
+    auto resized = resize (image.second, cv::Mat (round (image.second.rows * factor), round (image.second.cols * factor), CV_8UC3));
+    auto out = Image (image.first, resized);
+    LOG (INFO) << "Original '" << image.first << "'\tresized by factor " << factor << ": " << deviation (image.second, out.second);
+    write_image (std::string ("original/resize/") + std::to_string (factor), out);
+    return out;
+};
+
+static auto const resize_dims_l = [] (Image const & image, int width, int height) -> Image {
+    auto resized = resize (image.second, cv::Mat (width, height, CV_8UC3));
+    auto out = Image (image.first, resized);
+    LOG (INFO) << "Original '" << image.first << "'\tresized to dimensions " << width << "x" << height << ": " << deviation (image.second, out.second);
+    write_image (std::string ("original/resize/") + std::to_string (height) + 'x' + std::to_string (width), out);
+    return out;
+};
+
 static auto const grayify_l = [] (Image const & image) -> Image {
     Image out (image.first, grayify (image.second));
     write_image ("gray", out);
