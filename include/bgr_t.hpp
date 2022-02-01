@@ -20,6 +20,8 @@ struct Color_BGR {
     Color_BGR operator / (double divisor) const;
     Color_BGR & operator /= (double divisor);
     
+    bool operator == (Color_BGR const & other) const;
+    
     std::ostream & operator << (std::ostream & os) const;
 
     [[nodiscard]] unsigned int sum() const;

@@ -20,6 +20,12 @@ Color_BGR & Color_BGR::operator /= (double divisor) {
     return * this;
 }
 
+bool Color_BGR::operator == (Color_BGR const & other) const {
+    return  this->red() == other.red() &&
+            this->green() == other.green() &&
+            this->blue() == other.blue();
+}
+
 std::ostream & Color_BGR::operator << (std::ostream & os) const {
     return os << (short) blue() << " - " << (short) green() << " - " << (short) red();
 }

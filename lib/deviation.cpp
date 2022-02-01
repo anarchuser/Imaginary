@@ -1,16 +1,16 @@
 #include "deviation.hpp"
 
 Deviation deviation (cv::Mat const & original, cv::Mat const & comparee) {
-    // TODO: resize comparee to fit original
+    auto modified = resize (comparee, cv::Mat (original.rows, original.cols, CV_8UC3));
 
     auto area = original.cols * original.rows;
     double sum = 0.0;
     double max = 0.0;
-    for (int y = 0; y < original.rows && y < comparee.rows; y++) {
+    for (int y = 0; y < original.rows && y < modified.rows; y++) {
         auto orow = original.ptr<Color_BGR> (y);
-        auto drow = comparee.ptr<Color_BGR> (y);
+        auto drow = modified.ptr<Color_BGR> (y);
 
-        for (int x = 0; x < original.cols && comparee.cols; x++) {
+        for (int x = 0; x < original.cols && modified.cols; x++) {
             double dev = abs (orow [x].red() - drow [x].red());
             dev += abs (orow [x].green() - drow [x].green());
             dev += abs (orow [x].blue() - drow [x].blue());
