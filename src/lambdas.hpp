@@ -35,7 +35,7 @@ static auto const convolute_1s_l = [] (Image const & image, int size) -> Image {
 };
 
 static auto const convolute_gaussian_l = [] (Image const & image, int size) -> Image {
-    auto kernel = cv::getGaussianKernel (size * size, 1, CV_64F).reshape (1, size);
+    auto kernel = cv::getGaussianKernel (size * size, 3, CV_64F).reshape (1, size);
     auto convoluted = convolute (image.second, kernel);
     auto out = Image (image.first, convoluted);
     LOG (INFO) << "Original '" << image.first << "'\tconvoluted with gaussian " << square_string (size) << " matrix: " << deviation (image.second, out.second);
@@ -101,7 +101,7 @@ static auto const gray_convolute_1s_l = [] (Image const & image, int size) -> Im
 };
 
 static auto const gray_convolute_gaussian_l = [] (Image const & image, int size) -> Image {
-    auto kernel = cv::getGaussianKernel (size * size, 1, CV_64F).reshape (1, size);
+    auto kernel = cv::getGaussianKernel (size * size, 3, CV_64F).reshape (1, size);
     auto convoluted = convolute_gray (image.second, kernel);
     auto out = Image (image.first, convoluted);
     LOG (INFO) << "Gray '" << image.first << "'\tconvoluted with " << square_string (size) << " gaussian kernel: " << deviation_gray (image.second, out.second);
