@@ -13,6 +13,10 @@
 
 #include "config.h"
 
+// Sobel approximation taken from here:
+// https://homepages.inf.ed.ac.uk/rbf/HIPR2/sobel.htm
+cv::Mat sobel_approx_magnitude (cv::Mat const & src);
+
 cv::Mat canny (cv::Mat const & src);
 
 #endif //_IMAGINARY_CANNY_HPP
