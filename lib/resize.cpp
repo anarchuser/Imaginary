@@ -49,9 +49,6 @@ Color_BGR average (cv::Mat const & src, cv::Rect2d precise_area) {
         double upper_x_weight = upper_weight (pa.x + pa.width);
         double upper_y_weight = upper_weight (pa.y + pa.height);
         
-        auto X = [](double x) { return false; };
-        auto Y = [](double y) { return false; };
-        
         for (int y = 0; y < section.rows; y++) {
             auto     row = section.ptr <Color_BGR> (y);
             for (int x   = 0; x < section.cols; x++) {
@@ -76,14 +73,6 @@ Color_BGR average (cv::Mat const & src, cv::Rect2d precise_area) {
                 green += weight * row[x].green();
                 blue += weight * row[x].blue();
             }
-        }
-        if (X (std::round (pa.x / pa.width)) && Y (std::round (pa.y / pa.height))) {
-//            std::cout << "Complex case : " << sum << " / " << precise_area.area() << " == " << sum / precise_area.area() << std::endl;
-            std::cout << "weights: " << lower_x_weight << " / " << lower_y_weight << " // "
-                      << upper_x_weight << " / " << upper_y_weight << std::endl;
-            std::cout << "Section:\n" << section << std::endl;
-            std::cout << "Precise: " << pa << std::endl;
-            std::cout << "Rounded: " << ra << '\n' << std::endl;
         }
         return { (unsigned char) (blue / precise_area.area()), (unsigned char) (green / precise_area.area()), (unsigned char) (red / precise_area.area()) };
     }
@@ -121,7 +110,7 @@ double average_gray (cv::Mat const & src, cv::Rect2d precise_area) {
 
     // Trivial case: section covers 1 pixel only => return that one pixel
     if (ra.area() == 1) {
-        sum = src.at <double> (ra.y, ra.x);
+        return src.at <double> (ra.y, ra.x);
     }
 
     // Simple case: Section fits without rounding (section borders align to grid
@@ -132,7 +121,7 @@ double average_gray (cv::Mat const & src, cv::Rect2d precise_area) {
                 sum += row [x];
             }
         }
-        sum /= ra.area();
+        return sum / ra.area();
     }
     
     // Complex case: Weighted rectangle needed
@@ -141,13 +130,6 @@ double average_gray (cv::Mat const & src, cv::Rect2d precise_area) {
         double lower_y_weight = lower_weight (pa.y);
         double upper_x_weight = upper_weight (pa.x + pa.width);
         double upper_y_weight = upper_weight (pa.y + pa.height);
-
-        auto X = [](double x) { return false; };
-        auto Y = [](double y) { return false; };
-
-        if (X (std::round (pa.x / pa.width)) && Y (std::round (pa.y / pa.height))) {
-            std::cout << "======== [ " << std::round (pa.x / pa.width) << " | " << std::round (pa.y / pa.height) << "] ========" << std::endl;
-        }
 
         for (int y = 0; y < section.rows; y++) {
             auto     row = section.ptr <double> (y);
@@ -169,25 +151,11 @@ double average_gray (cv::Mat const & src, cv::Rect2d precise_area) {
                     if (y == 0) weight *= lower_y_weight;
                     if (y == section.rows - 1) weight *= upper_y_weight;
                 }
-                if (X (std::round (pa.x / pa.width)) && Y (std::round (pa.y / pa.height)))
-                    std::cout << "[" << x << " " << y << "] " << weight << " * " << row [x] << " + " << sum << " = ";
                 sum += weight * row[x];
-                if (X (std::round (pa.x / pa.width)) && Y (std::round (pa.y / pa.height)))
-                    std::cout << sum << std::endl;
             }
         }
-        if (X (std::round (pa.x / pa.width)) && Y (std::round (pa.y / pa.height))) {
-            std::cout << "Complex case : " << sum << " / " << precise_area.area() << " == " << sum / precise_area.area() << std::endl;
-            std::cout << "weights: " << lower_x_weight << " / " << lower_y_weight << " // "
-                      << upper_x_weight << " / " << upper_y_weight << std::endl;
-            std::cout << "Section:\n" << section << std::endl;
-            std::cout << "Precise: " << pa << std::endl;
-            std::cout << "Rounded: " << ra << '\n' << std::endl;
-        }
-        sum /= precise_area.area();
+        return sum / precise_area.area();
     }
-
-    return sum;
 }
 
 cv::Mat resize_gray (cv::Mat const & src, cv::Mat && dest) {
