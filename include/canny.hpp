@@ -9,13 +9,15 @@
 #include "grayify.hpp"
 #include "convolute.hpp"
 
-//#include "io.hpp"
-
 #include "config.h"
+
+#define THRESHOLD 80
 
 // Sobel approximation taken from here:
 // https://homepages.inf.ed.ac.uk/rbf/HIPR2/sobel.htm
 cv::Mat sobel_approx_magnitude (cv::Mat const & src);
+
+cv::Mat threshold_gray (cv::Mat const & src, double threshold);
 
 cv::Mat canny (cv::Mat const & src);
 

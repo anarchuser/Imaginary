@@ -21,6 +21,8 @@ std::vector <std::pair <std::string, cv::Mat>> read_images (int argc, char * arg
     // Read all files in IMG_IN dir
     std::cout << "Files read from IMG_IN directory:" << std::endl;
     for (auto const & file : fs::directory_iterator (IMG_IN)) {
+        if (! file.is_regular_file()) continue;
+        if (file.path().extension().empty()) continue;
         auto image = cv::imread (file.path());
         if (image.empty ()) continue;
         std::cout << '\t' << file.path() << ":\t" << image.rows << 'x' << image.cols << std::endl;

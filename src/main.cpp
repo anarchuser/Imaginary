@@ -81,6 +81,14 @@ int main (int argc, char * argv[]) {
 //        apply ([](Image const & image) { return resize_dims_l (image, 809, 401); });
         LOG (INFO) << "canny edge detection" << std::endl;
         APPLY (canny_l, nullptr);
+        LOG (INFO) << "canny edge detection with threshold 32" << std::endl;
+        APPLY (threshold_l, 32);
+        LOG (INFO) << "canny edge detection with threshold 64" << std::endl;
+        APPLY (threshold_l, 64);
+        LOG (INFO) << "canny edge detection with threshold 80" << std::endl;
+        APPLY (threshold_l, 80);
+        LOG (INFO) << "canny edge detection with threshold 128" << std::endl;
+        APPLY (threshold_l, 128);
     }
 
 #ifdef GRAYIFY

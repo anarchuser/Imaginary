@@ -120,7 +120,14 @@ static auto const gray_double_l = [] (Image const & image, int iterations) -> Im
 static auto const canny_l = [] (Image const & image, void * _) {
     auto out = Image (image.first, canny (image.second));
     LOG (INFO) << "Apply canny edge detection to '" << image.first << "'" << std::endl;
-    write_image (std::string ("canny/output"), out);
+    write_image (std::string ("canny"), out);
+    return out;
+};
+
+static auto const threshold_l = [] (Image const & image, int threshold) {
+    auto out = Image (image.first, threshold_gray (canny (image.second), threshold));
+    LOG (INFO) << "Apply threshold " << threshold << " to canny '" << image.first << "'" << std::endl;
+    write_image (std::string ("canny/threshold/") + std::to_string (threshold), out);
     return out;
 };
 

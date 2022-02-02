@@ -26,6 +26,20 @@ cv::Mat sobel_approx_magnitude (cv::Mat const & src) {
     return out;
 }
 
+cv::Mat threshold_gray (cv::Mat const & src, double threshold) {
+    LOG_ASSERT (src.channels() == 1);
+
+    auto img = src.clone();
+    for (int y = 0; y < img.rows; y++) {
+        auto row = img.ptr <double> (y);
+
+        for (int x = 0; x < src.cols; x++) {
+            row [x] = 255 * (row [x] >= threshold);
+        }
+    }
+    return img;
+}
+
 cv::Mat canny (cv::Mat const & src) {
     // Make gray if not gray
     auto img = (src.channels() == 1) ? src : grayify (src);
@@ -36,6 +50,11 @@ cv::Mat canny (cv::Mat const & src) {
 
     // Apply sobel kernels
     img = sobel_approx_magnitude (img);
+
+    // TODO: thin lines (e.g., non-maximum suppression)
+
+    // Make black-white
+//    img = threshold_gray (img, THRESHOLD);
 
     return img;
 }
