@@ -26,4 +26,12 @@ cv::Mat intensity_scale (cv::Mat const & src, double (lambda) (double)) {
     return dest;
 }
 
+cv::Mat scale (cv::Mat const & src, unsigned char min, unsigned char max) {
+    return src;
+}
+
+cv::Mat scale_gray (cv::Mat const & src, unsigned char min, unsigned char max) {
+    return src;
+}
+
 /* Copyright (C) Aaron Alef */
