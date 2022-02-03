@@ -9,6 +9,7 @@
 #include "resize.hpp"
 #include "deviation.hpp"
 #include "canny.hpp"
+#include "spatial.hpp"
 
 #include <cmath>
 #include <filesystem>
@@ -64,6 +65,15 @@ static auto const resize_dims_l = [] (Image const & image, int width, int height
     auto out = Image (image.first, resized);
     LOG (INFO) << "Original '" << image.first << "'\tresized to dimensions " << width << "x" << height << ": " << deviation (image.second, out.second);
     write_image (std::string ("original/resize/") + std::to_string (height) + 'x' + std::to_string (width), out);
+    return out;
+};
+
+static auto const intensity_scale_l = [] (Image const & image, Color_BGR (lambda) (Color_BGR)) -> Image {
+    static int img_index = 0;
+    auto scaled = intensity_scale (image.second, lambda);
+    auto out = Image (image.first, scaled);
+    LOG (INFO) << "Original '" << image.first << "'\tscaled by some lambda. Deviation: " << deviation (image.second, out.second);
+    write_image (std::string ("original/spatial/") + std::to_string (img_index++), out);
     return out;
 };
 
@@ -128,6 +138,15 @@ static auto const threshold_l = [] (Image const & image, int threshold) {
     auto out = Image (image.first, threshold_gray (canny (image.second), threshold));
     LOG (INFO) << "Apply threshold " << threshold << " to canny '" << image.first << "'" << std::endl;
     write_image (std::string ("canny/threshold/") + std::to_string (threshold), out);
+    return out;
+};
+
+static auto const gray_intensity_scale_l = [] (Image const & image, double (lambda) (double)) -> Image {
+    static int img_index = 0;
+    auto scaled = intensity_scale (image.second, lambda);
+    auto out = Image (image.first, scaled);
+    LOG (INFO) << "Gray '" << image.first << "'\tscaled by some lambda. Deviation: " << deviation_gray (image.second, out.second);
+    write_image (std::string ("gray/spatial/") + std::to_string (img_index++), out);
     return out;
 };
 

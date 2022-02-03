@@ -79,16 +79,21 @@ int main (int argc, char * argv[]) {
 //        APPLY (resize_l, 2.3);
 //        LOG (INFO) << "resize_dims, 401 x 809";
 //        apply ([](Image const & image) { return resize_dims_l (image, 809, 401); });
-        LOG (INFO) << "canny edge detection" << std::endl;
-        APPLY (canny_l, nullptr);
-        LOG (INFO) << "canny edge detection with threshold 32" << std::endl;
-        APPLY (threshold_l, 32);
-        LOG (INFO) << "canny edge detection with threshold 64" << std::endl;
-        APPLY (threshold_l, 64);
-        LOG (INFO) << "canny edge detection with threshold 80" << std::endl;
-        APPLY (threshold_l, 80);
-        LOG (INFO) << "canny edge detection with threshold 128" << std::endl;
-        APPLY (threshold_l, 128);
+//        LOG (INFO) << "canny edge detection" << std::endl;
+//        APPLY (canny_l, nullptr);
+//        LOG (INFO) << "canny edge detection with threshold 80" << std::endl;
+//        APPLY (threshold_l, 80);
+        LOG (INFO) << "1:1 original scale" << std::endl;
+        APPLY (intensity_scale_l, [] (Color_BGR input) { return input; });
+        LOG (INFO) << "original with inverted colours" << std::endl;
+        APPLY (intensity_scale_l, ([] (Color_BGR input) -> Color_BGR {
+            return { (unsigned char) (255 - input.blue()), (unsigned char) (255 - input.green()), (unsigned char) (255 - input.red()) };
+        }));
+        LOG (INFO) << "original as gray scale" << std::endl;
+        APPLY (intensity_scale_l, ([] (Color_BGR input) -> Color_BGR {
+            unsigned char avg = input.average();
+            return { avg, avg, avg };
+        }));
     }
 
 #ifdef GRAYIFY
@@ -127,6 +132,10 @@ int main (int argc, char * argv[]) {
 //        APPLY (gray_resize_l, 2.3);
 //        LOG (INFO) << "gray_resize_dims, 401 x 809";
 //        apply ([](Image const & image) { return gray_resize_dims_l (image, 809, 401); });
+        LOG (INFO) << "1:1 gray scale" << std::endl;
+        APPLY (gray_intensity_scale_l, [] (double input) { return input; });
+        LOG (INFO) << "gray inverted" << std::endl;
+        APPLY (gray_intensity_scale_l, [] (double input) -> double { return 255 - input; });
     }
 #endif
 
