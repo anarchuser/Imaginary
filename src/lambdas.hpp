@@ -77,6 +77,14 @@ static auto const intensity_scale_l = [] (Image const & image, Color_BGR (lambda
     return out;
 };
 
+static auto const scale_l = [] (Image const & image, void * _) -> Image {
+    auto scaled = scale (image.second);
+    auto out = Image (image.first, scaled);
+    LOG (INFO) << "Original '" << image.first << "'\tscaled to [0..255]: " << deviation (image.second, out.second);
+    write_image (std::string ("original/scaled"), out);
+    return out;
+};
+
 static auto const grayify_l = [] (Image const & image) -> Image {
     Image out (image.first, grayify (image.second));
     write_image ("gray", out);
@@ -147,6 +155,15 @@ static auto const gray_intensity_scale_l = [] (Image const & image, double (lamb
     auto out = Image (image.first, scaled);
     LOG (INFO) << "Gray '" << image.first << "'\tscaled by some lambda. Deviation: " << deviation_gray (image.second, out.second);
     write_image (std::string ("gray/spatial/") + std::to_string (img_index++), out);
+    return out;
+};
+
+static auto const gray_scale_l = [] (Image const & image, unsigned short const args) -> Image {
+    auto * _args = (unsigned char const *) & args;
+    auto scaled = scale_gray (image.second, _args[0], _args[1]);
+    auto out = Image (image.first, scaled);
+    LOG (INFO) << "Gray '" << image.first << "'\tscaled to [" << (unsigned int) _args[0] << ".." << (unsigned int) _args[1] << "]: " << deviation_gray (image.second, out.second);
+    write_image (std::string ("gray/scaled"), out);
     return out;
 };
 
