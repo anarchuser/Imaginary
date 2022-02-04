@@ -22,7 +22,7 @@
 
 #include <functional>
 
-#define SHORT(first, second) (first + 256 * second)
+#define SHORT(first, second) ((unsigned short) (first + 256 * second))
 
 using namespace cv;
 using namespace std::placeholders;
@@ -96,6 +96,10 @@ int main (int argc, char * argv[]) {
 //            unsigned char avg = input.average();
 //            return { avg, avg, avg };
 //        }));
+        LOG (INFO) << "original scaled to [0..256)" << std::endl;
+        APPLY (scale_l, SHORT (0, 255));
+        LOG (INFO) << "original scaled to [96..160)" << std::endl;
+        APPLY (scale_l, SHORT (96, 160));
     }
 
 #ifdef GRAYIFY
@@ -140,6 +144,8 @@ int main (int argc, char * argv[]) {
 //        APPLY (gray_intensity_scale_l, [] (double input) -> double { return 255 - input; });
         LOG (INFO) << "gray scaled to [0..256)" << std::endl;
         APPLY (gray_scale_l, SHORT (0, 255));
+        LOG (INFO) << "gray scaled to [96..160)" << std::endl;
+        APPLY (gray_scale_l, SHORT (96, 160));
     }
 #endif
 
