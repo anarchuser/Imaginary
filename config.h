@@ -27,6 +27,7 @@ using Image = std::pair <std::string, cv::Mat>;
 namespace fs = std::filesystem;
 
 // TODO: factor out into a "Config" struct
+//fs::path const IMG_IN  = PROJECT_ROOT "/../../Pictures/Nightcore";
 fs::path const IMG_IN  = PROJECT_ROOT "/in";
 fs::path const IMG_OUT = PROJECT_ROOT "/out";
 

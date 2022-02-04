@@ -10,6 +10,7 @@
 #include "deviation.hpp"
 #include "canny.hpp"
 #include "spatial.hpp"
+#include "sharpen.hpp"
 
 #include <cmath>
 #include <filesystem>
@@ -165,6 +166,14 @@ static auto const gray_scale_l = [] (Image const & image, unsigned short const a
     auto out = Image (image.first, scaled);
     LOG (INFO) << "Gray '" << image.first << "'\tscaled to [" << (unsigned int) _args[0] << ".." << (unsigned int) _args[1] << "]: " << deviation_gray (image.second, out.second);
     write_image (std::string ("gray/scaled/") + std::to_string ((unsigned int) _args [0]) + ".." + std::to_string ((unsigned int) _args [1]), out);
+    return out;
+};
+
+static auto const gray_sharpen_l = [] (Image const & image, void * _) -> Image {
+    auto sharpened = sharpen_gray (image.second);
+    auto out = Image (image.first, sharpened);
+    LOG (INFO) << "Gray '" << image.first << "'\tsharpened using laplace: " << deviation_gray (image.second, sharpened);
+    write_image (std::string ("gray/sharpen"), out);
     return out;
 };
 
