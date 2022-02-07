@@ -25,12 +25,12 @@ std::string square_string (int size) {
     return out + 'x' + out;
 }
 
-static auto const convolute_1s_l = [] (Image const & image, int size) -> Image {
+static auto const mean_l = [] (Image const & image, int size) -> Image {
     auto kernel = cv::Mat (size, size, CV_64FC1, 1);
     auto convoluted = convolute (image.second, kernel);
     auto out = Image (image.first, convoluted);
-    LOG (INFO) << "Original '" << image.first << "'\tconvoluted with " << square_string (size) << " matrix filled with 1's: " << deviation (image.second, out.second);
-    write_image (std::string ("convoluted/1's/") + square_string (size), out);
+    LOG (INFO) << "Original '" << image.first << "'\tconvoluted with " << square_string (size) << " mean filter: " << deviation (image.second, out.second);
+    write_image (std::string ("convoluted/mean/") + square_string (size), out);
     return out;
 };
 
@@ -109,12 +109,12 @@ static auto const gray_resize_dims_l = [] (Image const & image, int width, int h
     return out;
 };
 
-static auto const gray_convolute_1s_l = [] (Image const & image, int size) -> Image {
+static auto const gray_mean_l = [] (Image const & image, int size) -> Image {
     auto kernel = cv::Mat (size, size, CV_64FC1, 1);
     auto convoluted = convolute_gray (image.second, kernel);
     auto out = Image (image.first, convoluted);
-    LOG (INFO) << "Gray '" << image.first << "'\tconvoluted with " << square_string (size) << " matrix filled with 1's: " << deviation_gray (image.second, out.second);
-    write_image (std::string ("gray/convoluted/1's/") + square_string (size), out);
+    LOG (INFO) << "Gray '" << image.first << "'\tconvoluted with " << square_string (size) << " mean filter: " << deviation_gray (image.second, out.second);
+    write_image (std::string ("gray/convoluted/mean/") + square_string (size), out);
     return out;
 };
 

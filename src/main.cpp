@@ -51,12 +51,12 @@ int main (int argc, char * argv[]) {
         auto apply = [& originals] (Image lambda (Image const &)) {
             std::for_each (originals.begin (), originals.end (), lambda);
         };
-//        LOG (INFO) << "convolute_1s, 3";
-//        APPLY (convolute_1s_l, 3);
-//        LOG (INFO) << "convolute_1s, 5";
-//        APPLY (convolute_1s_l, 5);
-//        LOG (INFO) << "convolute_1s, 13";
-//        APPLY (convolute_1s_l, 13);
+//        LOG (INFO) << "mean, 3";
+//        APPLY (mean_l, 3);
+//        LOG (INFO) << "mean, 5";
+//        APPLY (mean_l, 5);
+//        LOG (INFO) << "mean, 13";
+//        APPLY (mean_l, 13);
 //        LOG (INFO) << "convolute_gaussian, 5";
 //        APPLY (convolute_gaussian_l, 5);
 //        LOG (INFO) << "convolute_gaussian, 9";
@@ -108,12 +108,12 @@ int main (int argc, char * argv[]) {
         auto apply = [& gray_scales] (Image lambda (Image const &)) {
             std::for_each (gray_scales.begin (), gray_scales.end (), lambda);
         };
-//        LOG (INFO) << "gray_convolute_1s, 3";
-//        APPLY (gray_convolute_1s_l, 3);
-//        LOG (INFO) << "gray_convolute_1s, 5";
-//        APPLY (gray_convolute_1s_l, 5);
-//        LOG (INFO) << "gray_convolute_1s, 13";
-//        APPLY (gray_convolute_1s_l, 13);
+//        LOG (INFO) << "gray_mean, 3";
+//        APPLY (gray_mean_l, 3);
+//        LOG (INFO) << "gray_mean, 5";
+//        APPLY (gray_mean_l, 5);
+//        LOG (INFO) << "gray_mean, 13";
+//        APPLY (gray_mean_l, 13);
 //        LOG (INFO) << "gray_convolute_gaussian, 5";
 //        APPLY (gray_convolute_gaussian_l, 5);
 //        LOG (INFO) << "gray_convolute_gaussian, 9";
@@ -146,8 +146,8 @@ int main (int argc, char * argv[]) {
 //        APPLY (gray_scale_l, SHORT (0, 255));
 //        LOG (INFO) << "gray scaled to [96..160]" << std::endl;
 //        APPLY (gray_scale_l, SHORT (96, 160));
-        LOG (INFO) << "gray sharpened" << std::endl;
-        APPLY (gray_sharpen_l, 0);
+//        LOG (INFO) << "gray sharpened" << std::endl;
+//        APPLY (gray_sharpen_l, 0);
     }
 #endif
 
