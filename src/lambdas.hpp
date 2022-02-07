@@ -11,6 +11,7 @@
 #include "canny.hpp"
 #include "spatial.hpp"
 #include "sharpen.hpp"
+#include "median.hpp"
 
 #include <cmath>
 #include <filesystem>
@@ -30,7 +31,15 @@ static auto const mean_l = [] (Image const & image, int size) -> Image {
     auto convoluted = convolute (image.second, kernel);
     auto out = Image (image.first, convoluted);
     LOG (INFO) << "Original '" << image.first << "'\tconvoluted with " << square_string (size) << " mean filter: " << deviation (image.second, out.second);
-    write_image (std::string ("convoluted/mean/") + square_string (size), out);
+    write_image (std::string ("mean/") + square_string (size), out);
+    return out;
+};
+
+static auto const median_l = [] (Image const & image, int size) -> Image {
+    auto processed = median (image.second, size);
+    auto out = Image (image.first, processed);
+    LOG (INFO) << "Original '" << image.first << "'\t with " << square_string (size) << " median filter applied" << deviation (image.second, out.second);
+    write_image (std::string ("median/") + square_string (size), out);
     return out;
 };
 
@@ -39,7 +48,7 @@ static auto const convolute_gaussian_l = [] (Image const & image, int size) -> I
     auto convoluted = convolute (image.second, kernel);
     auto out = Image (image.first, convoluted);
     LOG (INFO) << "Original '" << image.first << "'\tconvoluted with gaussian " << square_string (size) << " matrix: " << deviation (image.second, out.second);
-    write_image (std::string ("convoluted/gaussian/") + square_string (size), out);
+    write_image (std::string ("gaussian/") + square_string (size), out);
     return out;
 };
 
@@ -114,7 +123,15 @@ static auto const gray_mean_l = [] (Image const & image, int size) -> Image {
     auto convoluted = convolute_gray (image.second, kernel);
     auto out = Image (image.first, convoluted);
     LOG (INFO) << "Gray '" << image.first << "'\tconvoluted with " << square_string (size) << " mean filter: " << deviation_gray (image.second, out.second);
-    write_image (std::string ("gray/convoluted/mean/") + square_string (size), out);
+    write_image (std::string ("gray/mean/") + square_string (size), out);
+    return out;
+};
+
+static auto const gray_median_l = [] (Image const & image, int size) -> Image {
+    auto median = median_gray (image.second, size);
+    auto out = Image (image.first, median);
+    LOG (INFO) << "Gray '" << image.first << "'\t with " << square_string (size) << " median filter applied: " << deviation_gray (image.second, out.second);
+    write_image (std::string ("gray/median/") + square_string (size), out);
     return out;
 };
 
@@ -123,7 +140,7 @@ static auto const gray_convolute_gaussian_l = [] (Image const & image, int size)
     auto convoluted = convolute_gray (image.second, kernel);
     auto out = Image (image.first, convoluted);
     LOG (INFO) << "Gray '" << image.first << "'\tconvoluted with " << square_string (size) << " gaussian kernel: " << deviation_gray (image.second, out.second);
-    write_image (std::string ("gray/convoluted/gaussian/") + square_string (size), out);
+    write_image (std::string ("gray/gaussian/") + square_string (size), out);
     return out;
 };
 

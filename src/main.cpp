@@ -57,6 +57,12 @@ int main (int argc, char * argv[]) {
 //        APPLY (mean_l, 5);
 //        LOG (INFO) << "mean, 13";
 //        APPLY (mean_l, 13);
+        LOG (INFO) << "median, 3";
+        APPLY (median_l, 3);
+        LOG (INFO) << "median, 5";
+        APPLY (median_l, 5);
+        LOG (INFO) << "median, 13";
+        APPLY (median_l, 13);
 //        LOG (INFO) << "convolute_gaussian, 5";
 //        APPLY (convolute_gaussian_l, 5);
 //        LOG (INFO) << "convolute_gaussian, 9";
@@ -114,6 +120,12 @@ int main (int argc, char * argv[]) {
 //        APPLY (gray_mean_l, 5);
 //        LOG (INFO) << "gray_mean, 13";
 //        APPLY (gray_mean_l, 13);
+        LOG (INFO) << "gray_median, 3";
+        APPLY (gray_median_l, 3);
+        LOG (INFO) << "gray_median, 5";
+        APPLY (gray_median_l, 5);
+        LOG (INFO) << "gray_median, 13";
+        APPLY (gray_median_l, 13);
 //        LOG (INFO) << "gray_convolute_gaussian, 5";
 //        APPLY (gray_convolute_gaussian_l, 5);
 //        LOG (INFO) << "gray_convolute_gaussian, 9";
