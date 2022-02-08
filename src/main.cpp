@@ -37,78 +37,82 @@ int main (int argc, char * argv[]) {
     LOG (INFO) << "Clear output directory";
     init_out();
 
+#ifdef ORIGINAL
     LOG (INFO) << "Write original images";
     for (auto const & original : originals) {
         write_image ("original", original);
     }
-
-    LOG (INFO) << "Convert to gray and write images";
-    std::vector <Image> gray_scales;
-    std::transform (originals.begin(), originals.end(), std::back_inserter (gray_scales), grayify_l);
 
     LOG (INFO) << "Apply operations to original images";
     {
         auto apply = [& originals] (Image lambda (Image const &)) {
             std::for_each (originals.begin (), originals.end (), lambda);
         };
-//        LOG (INFO) << "mean, 3";
-//        APPLY (mean_l, 3);
-//        LOG (INFO) << "mean, 5";
-//        APPLY (mean_l, 5);
-//        LOG (INFO) << "mean, 13";
-//        APPLY (mean_l, 13);
+        LOG (INFO) << "mean, 3";
+        APPLY (mean_l, 3);
+        LOG (INFO) << "mean, 5";
+        APPLY (mean_l, 5);
+        LOG (INFO) << "mean, 13";
+        APPLY (mean_l, 13);
         LOG (INFO) << "median, 3";
         APPLY (median_l, 3);
-        LOG (INFO) << "median, 5";
-        APPLY (median_l, 5);
+//        LOG (INFO) << "median, 5";
+//        APPLY (median_l, 5);
         LOG (INFO) << "median, 13";
         APPLY (median_l, 13);
-//        LOG (INFO) << "convolute_gaussian, 5";
-//        APPLY (convolute_gaussian_l, 5);
-//        LOG (INFO) << "convolute_gaussian, 9";
-//        APPLY (convolute_gaussian_l, 9);
-//        LOG (INFO) << "convolute_gaussian, 19";
-//        APPLY (convolute_gaussian_l, 19);
-//        LOG (INFO) << "double, 1";
-//        APPLY (double_l, 1);
-//        LOG (INFO) << "double, 2";
-//        APPLY (double_l, 2);
-////        LOG (INFO) << "double, 3";
-////        APPLY (double_l, 3);
-////        LOG (INFO) << "double, 4";
-////        APPLY (double_l, 4);
-//        LOG (INFO) << "resize, 0.4";
-//        APPLY (resize_l, 0.4);
-//        LOG (INFO) << "resize, 1.5";
-//        APPLY (resize_l, 1.5);
-//        LOG (INFO) << "resize, 1.7";
-//        APPLY (resize_l, 1.7);
-//        LOG (INFO) << "resize, 2.3";
-//        APPLY (resize_l, 2.3);
-//        LOG (INFO) << "resize_dims, 401 x 809";
-//        apply ([](Image const & image) { return resize_dims_l (image, 809, 401); });
-//        LOG (INFO) << "canny edge detection" << std::endl;
-//        APPLY (canny_l, nullptr);
-//        LOG (INFO) << "canny edge detection with threshold 80" << std::endl;
-//        APPLY (threshold_l, 80);
-//        LOG (INFO) << "1:1 original scale" << std::endl;
-//        APPLY (intensity_scale_l, [] (Color_BGR input) { return input; });
-//        LOG (INFO) << "original with inverted colours" << std::endl;
-//        APPLY (intensity_scale_l, ([] (Color_BGR input) -> Color_BGR {
-//            return { (unsigned char) (255 - input.blue()), (unsigned char) (255 - input.green()), (unsigned char) (255 - input.red()) };
-//        }));
-//        LOG (INFO) << "original as gray scale" << std::endl;
-//        APPLY (intensity_scale_l, ([] (Color_BGR input) -> Color_BGR {
-//            unsigned char avg = input.average();
-//            return { avg, avg, avg };
-//        }));
-//        LOG (INFO) << "original scaled to [0..255]" << std::endl;
-//        APPLY (scale_l, SHORT (0, 255));
-//        LOG (INFO) << "original scaled to [96..160]" << std::endl;
-//        APPLY (scale_l, SHORT (96, 160));
+        LOG (INFO) << "convolute_gaussian, 5";
+        APPLY (convolute_gaussian_l, 5);
+        LOG (INFO) << "convolute_gaussian, 9";
+        APPLY (convolute_gaussian_l, 9);
+        LOG (INFO) << "convolute_gaussian, 19";
+        APPLY (convolute_gaussian_l, 19);
+        LOG (INFO) << "double, 1";
+        APPLY (double_l, 1);
+        LOG (INFO) << "double, 2";
+        APPLY (double_l, 2);
+//        LOG (INFO) << "double, 3";
+//        APPLY (double_l, 3);
+//        LOG (INFO) << "double, 4";
+//        APPLY (double_l, 4);
+        LOG (INFO) << "resize, 0.4";
+        APPLY (resize_l, 0.4);
+        LOG (INFO) << "resize, 1.5";
+        APPLY (resize_l, 1.5);
+        LOG (INFO) << "resize, 1.7";
+        APPLY (resize_l, 1.7);
+        LOG (INFO) << "resize, 2.3";
+        APPLY (resize_l, 2.3);
+        LOG (INFO) << "resize_dims, 401 x 809";
+        apply ([](Image const & image) { return resize_dims_l (image, 809, 401); });
+        LOG (INFO) << "canny edge detection" << std::endl;
+        APPLY (canny_l, nullptr);
+        LOG (INFO) << "canny edge detection with threshold 80" << std::endl;
+        APPLY (threshold_l, 80);
+        LOG (INFO) << "1:1 original scale" << std::endl;
+        APPLY (intensity_scale_l, [] (Color_BGR input) { return input; });
+        LOG (INFO) << "original with inverted colours" << std::endl;
+        APPLY (intensity_scale_l, ([] (Color_BGR input) -> Color_BGR {
+            return { (unsigned char) (255 - input.blue()), (unsigned char) (255 - input.green()), (unsigned char) (255 - input.red()) };
+        }));
+        LOG (INFO) << "original as gray scale" << std::endl;
+        APPLY (intensity_scale_l, ([] (Color_BGR input) -> Color_BGR {
+            unsigned char avg = input.average();
+            return { avg, avg, avg };
+        }));
+        LOG (INFO) << "original scaled to [0..255]" << std::endl;
+        APPLY (scale_l, SHORT (0, 255));
+        LOG (INFO) << "original scaled to [96..160]" << std::endl;
+        APPLY (scale_l, SHORT (96, 160));
+        LOG (INFO) << "original sharpened" << std::endl;
+        APPLY (sharpen_l, 0);
     }
+#endif
 
 #ifdef GRAYIFY
+    LOG (INFO) << "Convert to gray and write images";
+    std::vector <Image> gray_scales;
+    std::transform (originals.begin(), originals.end(), std::back_inserter (gray_scales), grayify_l);
+
     LOG (INFO) << "Apply operations to gray images";
     {
         auto apply = [& gray_scales] (Image lambda (Image const &)) {
@@ -120,12 +124,12 @@ int main (int argc, char * argv[]) {
 //        APPLY (gray_mean_l, 5);
 //        LOG (INFO) << "gray_mean, 13";
 //        APPLY (gray_mean_l, 13);
-        LOG (INFO) << "gray_median, 3";
-        APPLY (gray_median_l, 3);
-        LOG (INFO) << "gray_median, 5";
-        APPLY (gray_median_l, 5);
-        LOG (INFO) << "gray_median, 13";
-        APPLY (gray_median_l, 13);
+//        LOG (INFO) << "gray_median, 3";
+//        APPLY (gray_median_l, 3);
+//        LOG (INFO) << "gray_median, 5";
+//       APPLY (gray_median_l, 5);
+//        LOG (INFO) << "gray_median, 13";
+//        APPLY (gray_median_l, 13);
 //        LOG (INFO) << "gray_convolute_gaussian, 5";
 //        APPLY (gray_convolute_gaussian_l, 5);
 //        LOG (INFO) << "gray_convolute_gaussian, 9";

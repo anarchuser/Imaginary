@@ -38,7 +38,7 @@ static auto const mean_l = [] (Image const & image, int size) -> Image {
 static auto const median_l = [] (Image const & image, int size) -> Image {
     auto processed = median (image.second, size);
     auto out = Image (image.first, processed);
-    LOG (INFO) << "Original '" << image.first << "'\t with " << square_string (size) << " median filter applied" << deviation (image.second, out.second);
+    LOG (INFO) << "Original '" << image.first << "'\t with " << square_string (size) << " median filter applied: " << deviation (image.second, out.second);
     write_image (std::string ("median/") + square_string (size), out);
     return out;
 };
@@ -93,6 +93,14 @@ static auto const scale_l = [] (Image const & image, unsigned short const args) 
     auto out = Image (image.first, scaled);
     LOG (INFO) << "Original '" << image.first << "'\tscaled to [" << (unsigned int) _args[0] << ".." << (unsigned int) _args[1] << "]: " << deviation (image.second, out.second);
     write_image (std::string ("original/scaled/") + std::to_string ((unsigned int) _args [0]) + ".." + std::to_string ((unsigned int) _args [1]), out);
+    return out;
+};
+
+static auto const sharpen_l = [] (Image const & image, void * _) -> Image {
+    auto sharpened = sharpen (image.second);
+    auto out = Image (image.first, sharpened);
+    LOG (INFO) << "Original '" << image.first << "'\tsharpened using laplace: " << deviation (image.second, sharpened);
+    write_image (std::string ("original/sharpen"), out);
     return out;
 };
 

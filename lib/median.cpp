@@ -44,7 +44,7 @@ cv::Mat median_gray (cv::Mat const & src, int size) {
         for (int x = 0; x < src.cols; x++) {
             std::vector <double> values;
 
-            for (int j = - size / 2; j < size / 2; size++) {
+            for (int j = - size / 2; j < size / 2; j++) {
                 for (int i = - size / 2; i < size / 2; i++) {
                     if (within_bounds (src, x + i, y + j)) {
                         double value = src.at <double> (y + j, x + i);
