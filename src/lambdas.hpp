@@ -104,6 +104,14 @@ static auto const sharpen_l = [] (Image const & image, void * _) -> Image {
     return out;
 };
 
+static auto const unsharp_mask_l = [] (Image const & image, void * _) -> Image {
+    auto sharpened = unsharp_mask (image.second);
+    auto out = Image (image.first, sharpened);
+    LOG (INFO) << "Original '" << image.first << "'\tsharpened using unsharp masking: " << deviation (image.second, sharpened);
+    write_image (std::string ("original/unsharp"), out);
+    return out;
+};
+
 static auto const grayify_l = [] (Image const & image) -> Image {
     Image out (image.first, grayify (image.second));
     write_image ("gray", out);
@@ -199,6 +207,14 @@ static auto const gray_sharpen_l = [] (Image const & image, void * _) -> Image {
     auto out = Image (image.first, sharpened);
     LOG (INFO) << "Gray '" << image.first << "'\tsharpened using laplace: " << deviation_gray (image.second, sharpened);
     write_image (std::string ("gray/sharpen"), out);
+    return out;
+};
+
+static auto const gray_unsharp_mask_l = [] (Image const & image, void * _) -> Image {
+    auto sharpened = unsharp_mask_gray (image.second);
+    auto out = Image (image.first, sharpened);
+    LOG (INFO) << "Gray '" << image.first << "'\tsharpened using unsharp masking: " << deviation_gray (image.second, sharpened);
+    write_image (std::string ("gray/unsharp"), out);
     return out;
 };
 

@@ -11,8 +11,10 @@
 #define GAUSSIAN_SIGMA 1.5
 
 cv::Mat sharpen (cv::Mat const & src);
-
 cv::Mat sharpen_gray (cv::Mat const & src);
+
+cv::Mat unsharp_mask (cv::Mat const & src);
+cv::Mat unsharp_mask_gray (cv::Mat const & src);
 
 #endif //IMAGINARY_SHARPEN_HPP
 
