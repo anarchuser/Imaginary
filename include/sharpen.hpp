@@ -13,8 +13,8 @@
 cv::Mat sharpen (cv::Mat const & src);
 cv::Mat sharpen_gray (cv::Mat const & src);
 
-cv::Mat unsharp_mask (cv::Mat const & src);
-cv::Mat unsharp_mask_gray (cv::Mat const & src);
+cv::Mat unsharp_mask (cv::Mat const & src, double weight);
+cv::Mat unsharp_mask_gray (cv::Mat const & src, double weight);
 
 #endif //IMAGINARY_SHARPEN_HPP
 

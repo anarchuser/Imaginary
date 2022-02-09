@@ -44,7 +44,7 @@ cv::Mat sharpen_gray (cv::Mat const & src) {
     return dest;
 }
 
-cv::Mat unsharp_mask (cv::Mat const & src) {
+cv::Mat unsharp_mask (cv::Mat const & src, double weight) {
     auto dest = src.clone();
     auto gaussian = cv::getGaussianKernel (49, 2.5, CV_64F).reshape (1, 7);
     auto smoothed = convolute (src, gaussian);
@@ -55,14 +55,14 @@ cv::Mat unsharp_mask (cv::Mat const & src) {
 
         for (int x = 0; x < src.cols; x++) {
             for (int i = 0; i < 3; i++) {
-                drow [x][i] = std::max (0, std::min (255, 2 * (int) drow [x][i] - srow [x][i]));
+                drow [x][i] = std::max (0, std::min (255, 2 * (int) drow [x][i] - (int) (weight * srow [x][i])));
             }
         }
     }
     return dest;
 }
 
-cv::Mat unsharp_mask_gray (cv::Mat const & src) {
+cv::Mat unsharp_mask_gray (cv::Mat const & src, double weight) {
     auto dest = src.clone();
     auto gaussian = cv::getGaussianKernel (49, 2.5, CV_64F).reshape (1, 7);
     auto smoothed = convolute (src, gaussian);
@@ -72,7 +72,7 @@ cv::Mat unsharp_mask_gray (cv::Mat const & src) {
         auto drow = dest.ptr <double> (y);
 
         for (int x = 0; x < src.cols; x++) {
-            drow [x] = std::max (0.0, std::min (255.0, 2 * drow [x] - srow [x]));
+            drow [x] = std::max (0.0, std::min (255.0, 2 * drow [x] - weight * srow [x]));
         }
     }
     return dest;

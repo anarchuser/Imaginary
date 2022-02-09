@@ -12,6 +12,7 @@
 #include "spatial.hpp"
 #include "sharpen.hpp"
 #include "median.hpp"
+#include "io.hpp"
 
 #include <cmath>
 #include <filesystem>
@@ -104,11 +105,11 @@ static auto const sharpen_l = [] (Image const & image, void * _) -> Image {
     return out;
 };
 
-static auto const unsharp_mask_l = [] (Image const & image, void * _) -> Image {
-    auto sharpened = unsharp_mask (image.second);
+static auto const unsharp_mask_l = [] (Image const & image, double weight) -> Image {
+    auto sharpened = unsharp_mask (image.second, weight);
     auto out = Image (image.first, sharpened);
-    LOG (INFO) << "Original '" << image.first << "'\tsharpened using unsharp masking: " << deviation (image.second, sharpened);
-    write_image (std::string ("original/unsharp"), out);
+    LOG (INFO) << "Original '" << image.first << "'\tsharpened using unsharp masking with weight " << weight << ": " << deviation (image.second, sharpened);
+    write_image (std::string ("original/unsharp/") + std::to_string (weight), out);
     return out;
 };
 
@@ -210,14 +211,33 @@ static auto const gray_sharpen_l = [] (Image const & image, void * _) -> Image {
     return out;
 };
 
-static auto const gray_unsharp_mask_l = [] (Image const & image, void * _) -> Image {
-    auto sharpened = unsharp_mask_gray (image.second);
+static auto const gray_unsharp_mask_l = [] (Image const & image, double weight) -> Image {
+    auto sharpened = unsharp_mask_gray (image.second, weight);
     auto out = Image (image.first, sharpened);
-    LOG (INFO) << "Gray '" << image.first << "'\tsharpened using unsharp masking: " << deviation_gray (image.second, sharpened);
-    write_image (std::string ("gray/unsharp"), out);
+    LOG (INFO) << "Gray '" << image.first << "'\tsharpened using unsharp masking with weight " << weight << ": " << deviation_gray (image.second, sharpened);
+    write_image (std::string ("gray/unsharp/") + std::to_string (weight), out);
     return out;
 };
 
+static auto const gray_bits_l = [] (Image const & image, void * _) -> Image {
+    std::vector <Image> planes;
+    planes.emplace_back (image.first, intensity_scale (image.second, [] (double intensity) -> double { return double (((unsigned char) intensity & (1 << 0)) * 255); }));
+    planes.emplace_back (image.first, intensity_scale (image.second, [] (double intensity) -> double { return double (((unsigned char) intensity & (1 << 1)) * 255); }));
+    planes.emplace_back (image.first, intensity_scale (image.second, [] (double intensity) -> double { return double (((unsigned char) intensity & (1 << 2)) * 255); }));
+    planes.emplace_back (image.first, intensity_scale (image.second, [] (double intensity) -> double { return double (((unsigned char) intensity & (1 << 3)) * 255); }));
+    planes.emplace_back (image.first, intensity_scale (image.second, [] (double intensity) -> double { return double (((unsigned char) intensity & (1 << 4)) * 255); }));
+    planes.emplace_back (image.first, intensity_scale (image.second, [] (double intensity) -> double { return double (((unsigned char) intensity & (1 << 5)) * 255); }));
+    planes.emplace_back (image.first, intensity_scale (image.second, [] (double intensity) -> double { return double (((unsigned char) intensity & (1 << 6)) * 255); }));
+    planes.emplace_back (image.first, intensity_scale (image.second, [] (double intensity) -> double { return double (((unsigned char) intensity & (1 << 7)) * 255); }));
+
+    LOG (INFO) << "test" << std::endl;
+    for (int i = 0; i < planes.size(); i++) {
+        LOG (INFO) << "Gray '" << image.first << "'\t, bit plane " << i << ": " << deviation_gray (image.second, planes [i].second);
+        write_image (std::string ("gray/planes/") + std::to_string (i), planes [i]);
+    }
+    LOG (INFO) << "test" << std::endl;
+    return image;
+};
 #endif //IMAGINARY_LAMBDAS_H
 
 /* Copyright (C) Aaron Alef */

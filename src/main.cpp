@@ -103,10 +103,12 @@ int main (int argc, char * argv[]) {
 //        APPLY (scale_l, SHORT (0, 255));
 //        LOG (INFO) << "original scaled to [96..160]" << std::endl;
 //        APPLY (scale_l, SHORT (96, 160));
-        LOG (INFO) << "original sharpened" << std::endl;
-        APPLY (sharpen_l, nullptr);
-        LOG (INFO) << "original unsharp masked" << std::endl;
-        APPLY (unsharp_mask_l, nullptr);
+//        LOG (INFO) << "original sharpened" << std::endl;
+//        APPLY (sharpen_l, nullptr);
+        LOG (INFO) << "original unsharp masked, 1.0" << std::endl;
+        APPLY (unsharp_mask_l, 1.0);
+        LOG (INFO) << "original unsharp masked, 4.0" << std::endl;
+        APPLY (unsharp_mask_l, 4.0);
     }
 #endif
 
@@ -164,10 +166,14 @@ int main (int argc, char * argv[]) {
 //        APPLY (gray_scale_l, SHORT (0, 255));
 //        LOG (INFO) << "gray scaled to [96..160]" << std::endl;
 //        APPLY (gray_scale_l, SHORT (96, 160));
-        LOG (INFO) << "gray sharpened" << std::endl;
-        APPLY (gray_sharpen_l, nullptr);
-        LOG (INFO) << "gray unsharp masked" << std::endl;
-        APPLY (gray_unsharp_mask_l, nullptr);
+//        LOG (INFO) << "gray sharpened" << std::endl;
+//        APPLY (gray_sharpen_l, nullptr);
+//        LOG (INFO) << "gray unsharp masked, 1.0" << std::endl;
+//        APPLY (gray_unsharp_mask_l, 1.0);
+//        LOG (INFO) << "gray unsharp masked, 4.0" << std::endl;
+//        APPLY (gray_unsharp_mask_l, 4.0);
+        LOG (INFO) << "gray bit planes" << std::endl;
+        APPLY (gray_bits_l, nullptr);
     }
 #endif
 
