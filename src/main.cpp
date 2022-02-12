@@ -222,7 +222,7 @@ int main (int argc, char * argv[]) {
 
 #ifdef RANDOM
     std::cout << "Constructing random images" << std::endl;
-    cv::Mat random (500, 800, CV_64FC1);
+    cv::Mat random (500, 800, CV_8UC3);
     randu(random, cv::Scalar::all(0), cv::Scalar::all(255));
     write_image ("random", Image ("random.png", random));
 #endif
