@@ -33,7 +33,10 @@ std::vector <std::pair <std::string, cv::Mat>> read_images (int argc, char * arg
 
 void init_out () {
     // Clear output directory
-    fs::remove_all (IMG_OUT);
+    for (auto & file: fs::directory_iterator (IMG_OUT))
+        fs::remove_all (file);
+
+    LOG_ASSERT (fs::is_empty (IMG_OUT));
 
     // Recreate output directory
     fs::create_directories (IMG_OUT);
