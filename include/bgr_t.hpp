@@ -26,12 +26,14 @@ public:
     [[nodiscard]] unsigned char red() const;
 
     Color_BGR (unsigned char blue, unsigned char green, unsigned char red);
-    Color_BGR (unsigned char const values [3]);
+    explicit Color_BGR (unsigned char const values [3]);
     Color_BGR & operator = (unsigned char const values [3]);
 
     unsigned char & operator [] (unsigned int index);
     unsigned char   operator [] (unsigned int index) const;
-    
+
+    Color_BGR   operator *  (double factor) const;
+
     Color_BGR   operator /  (double divisor) const;
     Color_BGR & operator /= (double divisor);
     

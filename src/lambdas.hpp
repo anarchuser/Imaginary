@@ -130,14 +130,14 @@ namespace original {
 
     static auto const bits_l = [] (Image const & image, void * _) -> Image {
         std::vector<Image> planes;
-        planes.emplace_back (image.first, intensity_scale (image.second, [] (Color_BGR intensity) -> Color_BGR { return intensity & (1 << 0); }));
-        planes.emplace_back (image.first, intensity_scale (image.second, [] (Color_BGR intensity) -> Color_BGR { return intensity & (1 << 1); }));
-        planes.emplace_back (image.first, intensity_scale (image.second, [] (Color_BGR intensity) -> Color_BGR { return intensity & (1 << 2); }));
-        planes.emplace_back (image.first, intensity_scale (image.second, [] (Color_BGR intensity) -> Color_BGR { return intensity & (1 << 3); }));
-        planes.emplace_back (image.first, intensity_scale (image.second, [] (Color_BGR intensity) -> Color_BGR { return intensity & (1 << 4); }));
-        planes.emplace_back (image.first, intensity_scale (image.second, [] (Color_BGR intensity) -> Color_BGR { return intensity & (1 << 5); }));
-        planes.emplace_back (image.first, intensity_scale (image.second, [] (Color_BGR intensity) -> Color_BGR { return intensity & (1 << 6); }));
-        planes.emplace_back (image.first, intensity_scale (image.second, [] (Color_BGR intensity) -> Color_BGR { return intensity & (1 << 7); }));
+        planes.emplace_back (image.first, intensity_scale (image.second, [] (Color_BGR intensity) -> Color_BGR { return (intensity & (1 << 0)) * 255; }));
+        planes.emplace_back (image.first, intensity_scale (image.second, [] (Color_BGR intensity) -> Color_BGR { return (intensity & (1 << 1)) * 255; }));
+        planes.emplace_back (image.first, intensity_scale (image.second, [] (Color_BGR intensity) -> Color_BGR { return (intensity & (1 << 2)) * 255; }));
+        planes.emplace_back (image.first, intensity_scale (image.second, [] (Color_BGR intensity) -> Color_BGR { return (intensity & (1 << 3)) * 255; }));
+        planes.emplace_back (image.first, intensity_scale (image.second, [] (Color_BGR intensity) -> Color_BGR { return (intensity & (1 << 4)) * 255; }));
+        planes.emplace_back (image.first, intensity_scale (image.second, [] (Color_BGR intensity) -> Color_BGR { return (intensity & (1 << 5)) * 255; }));
+        planes.emplace_back (image.first, intensity_scale (image.second, [] (Color_BGR intensity) -> Color_BGR { return (intensity & (1 << 6)) * 255; }));
+        planes.emplace_back (image.first, intensity_scale (image.second, [] (Color_BGR intensity) -> Color_BGR { return (intensity & (1 << 7)) * 255; }));
 
         for (int i = 0; i < planes.size (); i++) {
             LOG (INFO) << "Original '" << image.first << "'\t, bit plane " << i << ": "

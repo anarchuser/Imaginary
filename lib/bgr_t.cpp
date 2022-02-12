@@ -28,6 +28,10 @@ Color_BGR & Color_BGR::operator = (unsigned char const values [3]) {
 unsigned char & Color_BGR::operator [] (unsigned int index)       { return value[index]; }
 unsigned char   Color_BGR::operator [] (unsigned int index) const { return value[index]; }
 
+Color_BGR Color_BGR::operator * (double factor) const {
+    return {(unsigned char) (factor * value[0]), (unsigned char) (factor * value[1]), (unsigned char) (factor * value [2])};
+}
+
 Color_BGR Color_BGR::operator / (double divisor) const {
     return {(unsigned char) (value[0] / divisor), (unsigned char) (value[1] / divisor), (unsigned char) (value [2] / divisor)};
 }
