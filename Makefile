@@ -1,6 +1,6 @@
 # Simple Makefile providing an interface for cmake. Oh, sweet irony
 
-BUILD_DIR = cmake-build-debug
+BUILD_DIR = build
 
 .PHONY = all setup build run test clean
 

@@ -34,8 +34,12 @@ int main (int argc, char * argv[]) {
     LOG (INFO) << "Read images";
     auto originals = read_images (argc - 1, argv + 1);
 
+#ifndef IMAGE_OVERWRITE
     LOG (INFO) << "Clear output directory";
     init_out();
+#else
+    LOG (INFO) << "Overwrite previous images";
+#endif
 
 #ifdef ORIGINAL
     LOG (INFO) << "Write original images";
@@ -56,8 +60,8 @@ int main (int argc, char * argv[]) {
 //        APPLY (mean_l, 13);
 //        LOG (INFO) << "median, 3";
 //        APPLY (median_l, 3);
-////        LOG (INFO) << "median, 5";
-////        APPLY (median_l, 5);
+//        LOG (INFO) << "median, 5";
+//        APPLY (median_l, 5);
 //        LOG (INFO) << "median, 13";
 //        APPLY (median_l, 13);
 //        LOG (INFO) << "convolute_gaussian, 5";
@@ -70,10 +74,10 @@ int main (int argc, char * argv[]) {
 //        APPLY (double_l, 1);
 //        LOG (INFO) << "double, 2";
 //        APPLY (double_l, 2);
-////        LOG (INFO) << "double, 3";
-////        APPLY (double_l, 3);
-////        LOG (INFO) << "double, 4";
-////        APPLY (double_l, 4);
+//        //LOG (INFO) << "double, 3";
+//        //APPLY (double_l, 3);
+//        //LOG (INFO) << "double, 4";
+//        //APPLY (double_l, 4);
 //        LOG (INFO) << "resize, 0.4";
 //        APPLY (resize_l, 0.4);
 //        LOG (INFO) << "resize, 1.5";
@@ -105,10 +109,12 @@ int main (int argc, char * argv[]) {
 //        APPLY (scale_l, SHORT (96, 160));
 //        LOG (INFO) << "original sharpened" << std::endl;
 //        APPLY (sharpen_l, nullptr);
-        LOG (INFO) << "original unsharp masked, 1.0" << std::endl;
-        APPLY (unsharp_mask_l, 1.0);
-        LOG (INFO) << "original unsharp masked, 4.0" << std::endl;
-        APPLY (unsharp_mask_l, 4.0);
+//        LOG (INFO) << "original unsharp masked, 1.0" << std::endl;
+//        APPLY (unsharp_mask_l, 1.0);
+//        LOG (INFO) << "original unsharp masked, 2.0" << std::endl;
+//        APPLY (unsharp_mask_l, 2.0);
+        LOG (INFO) << "original bit planes" << std::endl;
+        APPLY (bits_l, nullptr);
     }
 #endif
 
@@ -131,7 +137,7 @@ int main (int argc, char * argv[]) {
 //        LOG (INFO) << "gray_median, 3";
 //        APPLY (gray_median_l, 3);
 //        LOG (INFO) << "gray_median, 5";
-//       APPLY (gray_median_l, 5);
+//        APPLY (gray_median_l, 5);
 //        LOG (INFO) << "gray_median, 13";
 //        APPLY (gray_median_l, 13);
 //        LOG (INFO) << "gray_convolute_gaussian, 5";
@@ -144,10 +150,10 @@ int main (int argc, char * argv[]) {
 //        APPLY (gray_double_l, 1);
 //        LOG (INFO) << "gray_double, 2";
 //        APPLY (gray_double_l, 2);
-////        LOG (INFO) << "gray_double, 3";
-////        APPLY (gray_double_l, 3);
-////        LOG (INFO) << "gray_double, 4";
-////        APPLY (gray_double_l, 4);
+//        //LOG (INFO) << "gray_double, 3";
+//        //APPLY (gray_double_l, 3);
+//        //LOG (INFO) << "gray_double, 4";
+//        //APPLY (gray_double_l, 4);
 //        LOG (INFO) << "gray_resize, 0.4";
 //        APPLY (gray_resize_l, 0.4);
 //        LOG (INFO) << "gray_resize, 1.5";
@@ -170,10 +176,10 @@ int main (int argc, char * argv[]) {
 //        APPLY (gray_sharpen_l, nullptr);
 //        LOG (INFO) << "gray unsharp masked, 1.0" << std::endl;
 //        APPLY (gray_unsharp_mask_l, 1.0);
-//        LOG (INFO) << "gray unsharp masked, 4.0" << std::endl;
-//        APPLY (gray_unsharp_mask_l, 4.0);
-        LOG (INFO) << "gray bit planes" << std::endl;
-        APPLY (gray_bits_l, nullptr);
+//        LOG (INFO) << "gray unsharp masked, 2.0" << std::endl;
+//        APPLY (gray_unsharp_mask_l, 2.0);
+//        LOG (INFO) << "gray bit planes" << std::endl;
+//        APPLY (gray_bits_l, nullptr);
     }
 #endif
 

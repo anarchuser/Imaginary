@@ -49,6 +49,11 @@ void write_image (std::string const & relative_path, std::pair <std::string, cv:
 
     fs::create_directories (parent);
     LOG_ASSERT (fs::exists (parent));
+
+#ifdef IMAGE_OVERWRITE
+    fs::remove (path);
+#endif
+
     LOG_ASSERT (! fs::exists (path));
     cv::imwrite (path, image.second);
     LOG_ASSERT (fs::exists (path));
@@ -62,7 +67,12 @@ void write_image (std::string const & relative_path, std::pair <std::string, cv:
     fs::create_directories (sym_parent);
     LOG_ASSERT (fs::exists (sym_parent));
 
+#ifdef IMAGE_OVERWRITE
+    fs::remove (sym_path);
+#endif
+
     LOG_ASSERT (! fs::exists (sym_path));
+
 #ifdef NO_SYMLINK
     cv::imwrite (sym_path, image.second);
 #else

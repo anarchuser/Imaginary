@@ -162,8 +162,9 @@ cv::Mat resize_gray (cv::Mat const & src, cv::Mat && dest) {
     LOG_ASSERT (src.channels() == 1);
     LOG_ASSERT (dest.channels() == 1);
 
-    if ((src.cols == dest.cols) && (src.rows == dest.rows))
+    if ((src.cols == dest.cols) && (src.rows == dest.rows)) {
         return dest = src.clone();
+    }
 
     double factor_x = (double) src.cols / dest.cols;
     double factor_y = (double) src.rows / dest.rows;

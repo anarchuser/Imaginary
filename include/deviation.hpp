@@ -5,6 +5,7 @@
 
 #include "bgr_t.hpp"
 #include "resize.hpp"
+#include "grayify.hpp"
 
 #include <cmath>
 

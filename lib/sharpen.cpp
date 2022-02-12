@@ -3,21 +3,23 @@
 cv::Mat sharpen (cv::Mat const & src) {
     LOG_ASSERT (src.channels() == 3);
 
-    auto gaussian = cv::getGaussianKernel (GAUSSIAN_SIZE * GAUSSIAN_SIZE, 1.5, CV_64F).reshape (1, GAUSSIAN_SIZE);
+    auto gaussian = cv::getGaussianKernel (GAUSSIAN_SIZE * GAUSSIAN_SIZE, GAUSSIAN_SIGMA, CV_64F).reshape (1, GAUSSIAN_SIZE);
     auto dest = convolute (src, gaussian);
 
     for (int y = 1; y < src.rows - 1; y++) {
+        auto drow = dest.ptr <Color_BGR> (y);
+
         for (int x = 1; x < src.cols - 1; x++) {
             unsigned char sums [3];
             for (int i = 0; i < 3; i++) {
                 sums [i] = std::max (0, std::min (255, 5 *
-                        (int) src.at <Color_BGR> (y + 0, x + 0).value [i] -
-                        (int) src.at <Color_BGR> (y + 1, x + 0).value [i] -
-                        (int) src.at <Color_BGR> (y + 0, x + 1).value [i] -
-                        (int) src.at <Color_BGR> (y - 1, x - 0).value [i] -
-                        (int) src.at <Color_BGR> (y - 0, x - 1).value [i]));
+                        (int) src.at <Color_BGR> (y + 0, x + 0) [i] -
+                        (int) src.at <Color_BGR> (y + 1, x + 0) [i] -
+                        (int) src.at <Color_BGR> (y + 0, x + 1) [i] -
+                        (int) src.at <Color_BGR> (y - 1, x - 0) [i] -
+                        (int) src.at <Color_BGR> (y - 0, x - 1) [i]));
             }
-            dest.at <Color_BGR> (y, x) = {(unsigned char) sums [0], (unsigned char) sums [1], (unsigned char) sums [2]};
+            drow [x] = sums;
         }
     }
     return dest;
@@ -27,7 +29,7 @@ cv::Mat sharpen_gray (cv::Mat const & src) {
     LOG_ASSERT (src.channels() == 1);
 
     auto gaussian = cv::getGaussianKernel (GAUSSIAN_SIZE * GAUSSIAN_SIZE, GAUSSIAN_SIGMA, CV_64F).reshape (1, GAUSSIAN_SIZE);
-    auto dest = convolute (src, gaussian);
+    auto dest = convolute_gray (src, gaussian);
 
     for (int y = 1; y < src.rows - 1; y++) {
         for (int x = 1; x < src.cols - 1; x++) {
@@ -65,7 +67,7 @@ cv::Mat unsharp_mask (cv::Mat const & src, double weight) {
 cv::Mat unsharp_mask_gray (cv::Mat const & src, double weight) {
     auto dest = src.clone();
     auto gaussian = cv::getGaussianKernel (49, 2.5, CV_64F).reshape (1, 7);
-    auto smoothed = convolute (src, gaussian);
+    auto smoothed = convolute_gray (src, gaussian);
 
     for (int y = 0; y < src.rows; y++) {
         auto srow = smoothed.ptr <double> (y);

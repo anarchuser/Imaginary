@@ -33,7 +33,9 @@ fs::path const IMG_OUT = PROJECT_ROOT "/out";
 
 #define NO_SYMLINK
 
-//#define ORIGINAL
+#define IMAGE_OVERWRITE
+
+#define ORIGINAL
 #define GRAYIFY
 //#define CONVOLUTE
 //#define RANDOM

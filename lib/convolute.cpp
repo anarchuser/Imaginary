@@ -43,6 +43,9 @@ cv::Mat convolute (cv::Mat const & original, cv::Mat const & kernel) {
 cv::Mat convolute_gray (cv::Mat const & original, cv::Mat const & kernel) {
     cv::Mat modified (original.rows, original.cols, CV_64FC1);
 
+    LOG_ASSERT (original.channels() == 1);
+    LOG_ASSERT (modified.channels() == 1);
+
     LOG_ASSERT (kernel.cols % 2 && kernel.rows % 2);
 
     for (int y = 0; y < modified.rows; y++) {

@@ -45,7 +45,7 @@ static auto const median_l = [] (Image const & image, int size) -> Image {
 };
 
 static auto const convolute_gaussian_l = [] (Image const & image, int size) -> Image {
-    auto kernel = cv::getGaussianKernel (size * size, 1.5, CV_64F).reshape (1, size);
+    auto kernel = cv::getGaussianKernel (size * size, 0.5 * size, CV_64F).reshape (1, size);
     auto convoluted = convolute (image.second, kernel);
     auto out = Image (image.first, convoluted);
     LOG (INFO) << "Original '" << image.first << "'\tconvoluted with gaussian " << square_string (size) << " matrix: " << deviation (image.second, out.second);
@@ -113,6 +113,25 @@ static auto const unsharp_mask_l = [] (Image const & image, double weight) -> Im
     return out;
 };
 
+static auto const bits_l = [] (Image const & image, void * _) -> Image {
+    std::vector <Image> planes;
+    planes.emplace_back (image.first, intensity_scale (image.second, [] (Color_BGR intensity) -> Color_BGR { return intensity & (1 << 0); }));
+    planes.emplace_back (image.first, intensity_scale (image.second, [] (Color_BGR intensity) -> Color_BGR { return intensity & (1 << 1); }));
+    planes.emplace_back (image.first, intensity_scale (image.second, [] (Color_BGR intensity) -> Color_BGR { return intensity & (1 << 2); }));
+    planes.emplace_back (image.first, intensity_scale (image.second, [] (Color_BGR intensity) -> Color_BGR { return intensity & (1 << 3); }));
+    planes.emplace_back (image.first, intensity_scale (image.second, [] (Color_BGR intensity) -> Color_BGR { return intensity & (1 << 4); }));
+    planes.emplace_back (image.first, intensity_scale (image.second, [] (Color_BGR intensity) -> Color_BGR { return intensity & (1 << 5); }));
+    planes.emplace_back (image.first, intensity_scale (image.second, [] (Color_BGR intensity) -> Color_BGR { return intensity & (1 << 6); }));
+    planes.emplace_back (image.first, intensity_scale (image.second, [] (Color_BGR intensity) -> Color_BGR { return intensity & (1 << 7); }));
+
+    for (int i = 0; i < planes.size(); i++) {
+        LOG (INFO) << "Gray '" << image.first << "'\t, bit plane " << i << ": " << deviation_gray (image.second, planes [i].second);
+        write_image (std::string ("gray/planes/") + std::to_string (i), planes [i]);
+    }
+    LOG (INFO) << "test" << std::endl;
+    return image;
+};
+
 static auto const grayify_l = [] (Image const & image) -> Image {
     Image out (image.first, grayify (image.second));
     write_image ("gray", out);
@@ -153,7 +172,7 @@ static auto const gray_median_l = [] (Image const & image, int size) -> Image {
 };
 
 static auto const gray_convolute_gaussian_l = [] (Image const & image, int size) -> Image {
-    auto kernel = cv::getGaussianKernel (size * size, 1.5, CV_64F).reshape (1, size);
+    auto kernel = cv::getGaussianKernel (size * size, 0.5 * size, CV_64F).reshape (1, size);
     auto convoluted = convolute_gray (image.second, kernel);
     auto out = Image (image.first, convoluted);
     LOG (INFO) << "Gray '" << image.first << "'\tconvoluted with " << square_string (size) << " gaussian kernel: " << deviation_gray (image.second, out.second);
@@ -230,7 +249,6 @@ static auto const gray_bits_l = [] (Image const & image, void * _) -> Image {
     planes.emplace_back (image.first, intensity_scale (image.second, [] (double intensity) -> double { return double (((unsigned char) intensity & (1 << 6)) * 255); }));
     planes.emplace_back (image.first, intensity_scale (image.second, [] (double intensity) -> double { return double (((unsigned char) intensity & (1 << 7)) * 255); }));
 
-    LOG (INFO) << "test" << std::endl;
     for (int i = 0; i < planes.size(); i++) {
         LOG (INFO) << "Gray '" << image.first << "'\t, bit plane " << i << ": " << deviation_gray (image.second, planes [i].second);
         write_image (std::string ("gray/planes/") + std::to_string (i), planes [i]);

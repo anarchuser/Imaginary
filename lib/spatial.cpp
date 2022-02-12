@@ -35,7 +35,7 @@ cv::Mat scale (cv::Mat const & src, unsigned char min, unsigned char max) {
         auto row = src.ptr <Color_BGR> (y);
 
         for (int x = 0; x < src.cols; x++) {
-            for (auto const color : row [x].value) {
+            for (auto const color : row [x]) {
                 _min = std::min (color, _min);
                 _max = std::max (color, _max);
             }
@@ -47,7 +47,7 @@ cv::Mat scale (cv::Mat const & src, unsigned char min, unsigned char max) {
         auto row = dest.ptr <Color_BGR> (y);
 
         for (int x = 0; x < src.cols; x++) {
-            for (auto & color : row [x].value) {
+            for (auto & color : row [x]) {
                 color = factor * (color + min - _min);
             }
         }

@@ -1,6 +1,6 @@
 #include <catch2/catch.hpp>
 
-TEST_CASE ("Tests be like") {
+TEST_CASE ("Here be dragons") {
     CHECK (true);
 }
 

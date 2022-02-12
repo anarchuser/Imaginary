@@ -23,17 +23,22 @@ Deviation deviation (cv::Mat const & original, cv::Mat const & comparee) {
 
 /// Returns a pair ov average and max
 Deviation deviation_gray (cv::Mat const & original, cv::Mat const & comparee) {
-    auto modified = resize_gray (comparee, cv::Mat (original.rows, original.cols, CV_64FC1));
+    // make comparee gray, if needed
+    auto gray = comparee.channels() == 1 ? comparee : grayify (comparee);
+
+    // let comparee match size of original
+    auto modified = resize_gray (gray, cv::Mat (original.rows, original.cols, CV_64FC1));
     
     auto area = original.cols * original.rows;
     double sum = 0.0;
     double max = 0.0;
+
     for (int y = 0; y < original.rows && y < modified.rows; y++) {
         auto orow = original.ptr <double> (y);
-        auto drow = modified.ptr <double> (y);
+        auto mrow = modified.ptr <double> (y);
 
         for (int x = 0; x < original.cols && x < modified.cols; x++) {
-            double dev = abs (orow [x] - drow [x]);
+            double dev = abs (orow [x] - mrow [x]);
             sum += dev;
             max = std::max (max, dev);
         }
