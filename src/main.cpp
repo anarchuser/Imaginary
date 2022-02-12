@@ -22,12 +22,14 @@
 #include "gray_lambdas.hpp"
 
 #include <functional>
+#include <execution>
 
 #define SHORT(first, second) ((unsigned short) (first + 256 * second))
 
 using namespace cv;
 using namespace std::placeholders;
 namespace fs = std::filesystem;
+namespace exec = std::execution;
 
 int main (int argc, char * argv[]) {
     google::InitGoogleLogging (argv[0]);
@@ -51,7 +53,7 @@ int main (int argc, char * argv[]) {
     LOG (INFO) << "Apply operations to original images";
     {
         auto apply = [& originals] (Image lambda (Image const &)) {
-            std::for_each (originals.begin (), originals.end (), lambda);
+            std::for_each (exec::par_unseq, originals.begin (), originals.end (), lambda);
         };
 //        std::cout << "mean, 3" << std::endl;
 //        APPLY (original::mean_l, 3);
@@ -141,7 +143,7 @@ int main (int argc, char * argv[]) {
     LOG (INFO) << "Apply operations to gray images";
     {
         auto apply = [& gray_scales] (Image lambda (Image const &)) {
-            std::for_each (gray_scales.begin (), gray_scales.end (), lambda);
+            std::for_each (exec::par_unseq, gray_scales.begin (), gray_scales.end (), lambda);
         };
 //        std::cout << "gray_mean, 3" << std::endl;
 //        APPLY (gray::mean_l, 3);

@@ -6,13 +6,13 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_COMPILER g++)
 
 # Library linker flags
-set(LDLIBS_GLOG "-lglog")
-set(LDLIBS_OPENCV "-lopencv_core -lopencv_calib3d -lopencv_highgui -lopencv_imgproc -lopencv_stitching -lopencv_video")
+set(LDLIBS "-lglog")
+#set(LDLIBS_OPENCV "-lopencv_core -lopencv_calib3d -lopencv_highgui -lopencv_imgproc -lopencv_stitching -lopencv_video")
 set(LDLIBS_OPENCV "lopencv_core -l opencv_imgcodecs -l opencv_highgui -lopencv_photo -l opencv_videoio -l opencv_imgproc -l opencv_calib3d")
 
 # Linker & compiler flags
-set(CMAKE_REQUIRED_LIBRARIES ${LDLIBS_GLOG} ${LDLIBS_OPENCV})
-set(CMAKE_CXX_FLAGS "-fconcepts")
+set(CMAKE_REQUIRED_LIBRARIES ${LDLIBS} ${LDLIBS_OPENCV})
+set(CMAKE_CXX_FLAGS "-fconcepts -ltbb")
 
 # List source files and define target
 file(GLOB_RECURSE LIBS ${PROJECT_SOURCE_DIR}/lib/*)
