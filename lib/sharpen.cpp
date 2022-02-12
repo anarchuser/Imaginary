@@ -57,7 +57,7 @@ cv::Mat unsharp_mask (cv::Mat const & src, double weight) {
 
         for (int x = 0; x < src.cols; x++) {
             for (int i = 0; i < 3; i++) {
-                drow [x][i] = std::max (0, std::min (255, 2 * (int) drow [x][i] - (int) (weight * srow [x][i])));
+                drow [x][i] = std::max (0, std::min (255, (int) ((1.0 + weight) * drow [x][i] - weight * srow [x][i])));
             }
         }
     }

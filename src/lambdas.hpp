@@ -140,9 +140,9 @@ namespace original {
         planes.emplace_back (image.first, intensity_scale (image.second, [] (Color_BGR intensity) -> Color_BGR { return intensity & (1 << 7); }));
 
         for (int i = 0; i < planes.size (); i++) {
-            LOG (INFO) << "Gray '" << image.first << "'\t, bit plane " << i << ": "
+            LOG (INFO) << "Original '" << image.first << "'\t, bit plane " << i << ": "
                        << deviation_gray (image.second, planes[i].second);
-            write_image (std::string ("gray/planes/") + std::to_string (i), planes[i]);
+            write_image (std::string ("original/planes/") + std::to_string (i), planes[i]);
         }
         LOG (INFO) << "test" << std::endl;
         return image;
