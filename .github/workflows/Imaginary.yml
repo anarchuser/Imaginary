@@ -22,6 +22,8 @@ jobs:
         run: cmake --build build --target Imaginary
 #     - name: Run the project
 #       run: ./build/Imaginary
+      - name: debug tbb error
+        run: cat build/CMakeCache.txt | grep -i TBB
 
   tests:
     runs-on: ubuntu-latest
