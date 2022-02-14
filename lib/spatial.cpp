@@ -82,4 +82,30 @@ cv::Mat scale_gray (cv::Mat const & src, unsigned char min, unsigned char max) {
     return dest;
 }
 
+cv::Mat scale_gray2 (cv::Mat const & src, unsigned char min, unsigned char max) {
+    auto dest = src.clone();
+
+    int _min = 255;
+    int _max = 0;
+    for (int y = 0; y < src.rows; y++) {
+        auto row = src.ptr <int> (y);
+
+        for (int x = 0; x < src.cols; x++) {
+            _min = std::min (row [x], _min);
+            _max = std::max (row [x], _max);
+        }
+    }
+
+    double factor = double (max) / (_max - _min + min);
+    for (int y = 0; y < src.rows; y++) {
+        auto drow = dest.ptr <int> (y);
+
+        for (int x = 0; x < src.cols; x++) {
+            drow [x] = factor * (drow [x] + min - _min);
+        }
+    }
+
+    return dest;
+}
+
 /* Copyright (C) Aaron Alef */

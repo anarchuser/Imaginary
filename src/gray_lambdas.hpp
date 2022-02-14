@@ -170,14 +170,19 @@ namespace gray {
         return image;
     };
 
-    static auto const dct_l = [] (Image const & image, void * _) -> Image {
-        auto dct = dct_gray (image.second);
-        auto out = Image (image.first, dct);
-        LOG (INFO) << "Discrete Cosine Transform of gray '" << image.first;
-        write_image ("gray/dct/", out);
+    static auto const compress_l = [] (Image const & image, uint64 mask) -> Image {
+        auto compressed = compress_dct_gray (image.second, BitMask (mask));
+        LOG (INFO) << "Compress gray '" << image.first << "' with mask " << (void *) mask << " using discrete cosine transform:\t" << deviation_gray (image.second, compressed);
+        auto out = Image (image.first, compressed);
+        write_image ("gray/compressed/", out);
+        return out;
+    };
 
-        auto idct = idct_gray (dct);
-        LOG (INFO) << "Inverse Discrete Cosine Transform of gray '" << image.first << "':\t" << deviation_gray (image.second, idct);
+    static auto const fast_dct_l = [] (Image const & image, void * _) -> Image {
+        auto dct = fast_dct_gray (image.second);
+        LOG (INFO) << "Discrete Cosine Transform of gray '" << image.first;
+        auto out = Image (image.first, scale_gray (dct));
+        write_image ("gray/fdct/", out);
         return out;
     };
 }

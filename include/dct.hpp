@@ -7,21 +7,33 @@
 
 #include <opencv2/opencv.hpp>
 
+#include <cmath>
+#define PI M_PI
+
 #include "config.h"
 
-#define DCT_WINDOW_SIZE 8
+struct BitMask {
+private:
+    uint64 const mask;
 
-cv::Mat dct        (cv::Mat const & src);
-cv::Mat dct_window (cv::Mat const && window, cv::Mat && dest);
+public:
+    explicit BitMask (uint64 mask);
+    explicit BitMask (unsigned char const mask [8]);
 
-cv::Mat idct        (cv::Mat const & src);
-cv::Mat idct_window (cv::Mat const && window, cv::Mat && dest);
+    [[nodiscard]] bool check (unsigned char x, unsigned char y) const;
+};
 
-cv::Mat dct_gray        (cv::Mat const & src);
-cv::Mat dct_window_gray (cv::Mat const && window, cv::Mat && dest);
+cv::Mat dct  (cv::Mat const & src);
+cv::Mat idct (cv::Mat const & src);
 
-cv::Mat idct_gray        (cv::Mat const & src);
-cv::Mat idct_window_gray (cv::Mat const && window, cv::Mat && dest);
+cv::Mat dct_gray  (cv::Mat const & src);
+cv::Mat idct_gray (cv::Mat const & src);
+
+cv::Mat fast_dct_gray      (cv::Mat const & src);
+void mask_gray (int window [8][8], BitMask mask);
+cv::Mat compress_dct_gray  (cv::Mat const & src, BitMask mask);
+void fast_dct_window_gray  (cv::Mat const && src, int window [8][8]);
+cv::Mat fast_idct_window_gray (int window [8][8], cv::Mat && dest);
 
 #endif //IMAGINARY_DCT_HPP
 
