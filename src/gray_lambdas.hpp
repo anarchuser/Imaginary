@@ -13,6 +13,7 @@
 #include "sharpen.hpp"
 #include "median.hpp"
 #include "io.hpp"
+#include "dct.hpp"
 
 #include <cmath>
 #include <filesystem>
@@ -167,6 +168,17 @@ namespace gray {
         }
         LOG (INFO) << "test" << std::endl;
         return image;
+    };
+
+    static auto const dct_l = [] (Image const & image, void * _) -> Image {
+        auto dct = dct_gray (image.second);
+        auto out = Image (image.first, dct);
+        LOG (INFO) << "Discrete Cosine Transform of gray '" << image.first;
+        write_image ("gray/dct/", out);
+
+        auto idct = idct_gray (dct);
+        LOG (INFO) << "Inverse Discrete Cosine Transform of gray '" << image.first << "':\t" << deviation_gray (image.second, idct);
+        return out;
     };
 }
 

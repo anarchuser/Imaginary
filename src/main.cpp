@@ -219,6 +219,8 @@ int main (int argc, char * argv[]) {
 //        APPLY (gray::unsharp_mask_l, 10.0);
 //        std::cout << "gray bit planes" << std::endl;
 //        APPLY (gray::bits_l, nullptr);
+        std::cout << "gray dct" << std::endl;
+        APPLY (gray::dct_l, nullptr);
     }
 #endif
 
