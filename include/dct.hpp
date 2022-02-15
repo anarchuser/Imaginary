@@ -35,6 +35,7 @@ cv::Mat dct_gray  (cv::Mat const & src);
 cv::Mat idct_gray (cv::Mat const & src);
 
 cv::Mat fast_dct_gray      (cv::Mat const & src);
+cv::Mat fast_idct_gray      (cv::Mat const & src);
 void mask_gray (int window [8][8], BitMask mask);
 cv::Mat compress_dct_gray  (cv::Mat const & src, BitMask mask);
 void fast_dct_window_gray  (cv::Mat const && src, int window [8][8]);

@@ -181,15 +181,19 @@ namespace gray {
     static auto const fast_dct_l = [] (Image const & image, void * _) -> Image {
         auto dct = fast_dct_gray (image.second);
         LOG (INFO) << "Discrete Cosine Transform of gray '" << image.first << "' in 8x8 blocks";
-        auto out = Image (image.first, scale_gray (dct));
-        write_image ("gray/fdct/", out);
-        return out;
+        write_image ("gray/fdct/", Image (image.first, scale_gray (dct)));
+
+        auto idct = fast_idct_gray (dct);
+        LOG (INFO) << "Inverse Discrete Cosine Transform of gray '" << image.first << "' in 8x8 blocks";
+        write_image ("gray/fidct/", Image (image.first, scale_gray (idct)));
+
+        return {image.first, dct};
     };
 
     static auto const dct_l = [] (Image const & image, void * _) -> Image {
         auto dct = dct_gray (image.second);
         LOG (INFO) << "Discrete Cosine Transform of gray '" << image.first << "'";
-        write_image ("gray/dct/", Image (image.first, dct));
+        write_image ("gray/dct/", Image (image.first, scale_gray (dct)));
 
         auto idct = idct_gray (dct);
         LOG (INFO) << "Inverse Discrete Cosine Transform of gray '" << image.first << "'";

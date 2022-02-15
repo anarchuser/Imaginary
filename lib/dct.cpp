@@ -14,14 +14,14 @@ double dct_forward_scale (double freq) {
     // scale values between ~[-1.000.000, 1.000.000] to [0, 256]
     double sign  = (freq > 0) - (freq < 0);
     double value = std::abs (freq);
-    return sign * 9 * log (value) + 127;
+    return sign * 1 * log (value) + 127;
 }
 
 double dct_backward_scale (double freq) {
     double scaled = freq - 127;
     double sign  = (scaled > 0) - (scaled < 0);
     double value = std::abs (scaled);
-    return sign * exp (value / 9.0);
+    return scaled;
 }
 
 cv::Mat dct_gray (cv::Mat const & src) {
@@ -50,29 +50,30 @@ cv::Mat dct_gray (cv::Mat const & src) {
                 }
             }
             drow [u] = dct_forward_scale (0.25 * Cu * Cv * z);
-            if (!v) std::cout << "F(" << u << ",\t" << v << ") = " << drow [u] << std::endl;
+            //if (!v) std::cout << "F(" << u << ",\t" << v << ") = " << drow [u] << std::endl;
         }
-        std::cout << v << " / " << dest.rows << std::endl;
     }
+    std::cout << "DCT Done" << std::endl;
     return dest;
 }
 
 cv::Mat fast_dct_gray (cv::Mat const & src) {
     LOG_ASSERT (src.channels() == 1);
 
-    cv::Mat dest ((src.rows / 8) * 4, (src.cols / 8) * 4, CV_64FC1);
+    cv::Mat dest ((src.rows / 8) * 8, (src.cols / 8) * 8, CV_64FC1);
 
-    for (int y = 0; y < dest.rows; y += 4) {
-        for (int x = 0; x < dest.cols; x += 4) {
-            cv::Rect2i section (2 * x, 2 * y, 8, 8);
+#pragma omp parallel for
+    for (int y = 0; y < dest.rows; y += 8) {
+        for (int x = 0; x < dest.cols; x += 8) {
+            cv::Rect2i section (x, y, 8, 8);
             int window[8][8];
             fast_dct_window_gray ({src, section}, window);
-            for (int j = 0; j < 8; j += 2) {
-                for (int i = 0; i < 8; i += 2) {
+            for (int j = 0; j < 8; j++) {
+                for (int i = 0; i < 8; i++) {
                     if (!i && !j) window [j][i] /= 8;
                     else window [j][i] *= 16;
                     window [j][i] += 128;
-                    dest.at <double> (y + i/2, x + j/2) = std::min (255, std::max (0, window [j][i]));
+                    dest.at <double> (y + i, x + j) = std::min (255.0, std::max (0.0, std::log (window [j][i])));
                 }
             }
         }
@@ -83,8 +84,9 @@ cv::Mat fast_dct_gray (cv::Mat const & src) {
 cv::Mat idct_gray (cv::Mat const & src) {
     LOG_ASSERT (src.channels() == 1);
 
-    cv::Mat dest (src.rows, src.cols, CV_64FC1);
+    cv::Mat dest (src.rows * DCT_COMPRESS, src.cols * DCT_COMPRESS, CV_64FC1);
 
+#pragma omp parallel for
     for (int y = 0; y < dest.rows; y++) {
         auto drow = dest.ptr <double> (y);
 
@@ -104,11 +106,35 @@ cv::Mat idct_gray (cv::Mat const & src) {
                     z += q;
                 }
             }
-            if (!y) std::cout << "I(" << x << ",\t" << y << ") = " << 0.25 * z << std::endl;
-            drow [x] = std::max (0.0, std::min (255.0, 0.25 * z));
+            drow [x] = std::max (0.0, std::min (255.0, 0.125 * z + 127));
             //if (!y) std::cout << "I(" << x << ",\t" << y << ") = " << drow [x] << std::endl;
         }
-        std::cout << y << " / " << dest.rows << std::endl;
+        //std::cout << y << " / " << dest.rows << std::endl;
+    }
+    std::cout << "Inverse DCT Done" << std::endl;
+    return dest;
+}
+
+cv::Mat fast_idct_gray (cv::Mat const & src) {
+    LOG_ASSERT (src.channels() == 1);
+
+    cv::Mat dest (src.rows, src.cols, CV_64FC1);
+
+#pragma omp parallel for
+    for (int y = 0; y < dest.rows; y += 8) {
+        for (int x = 0; x < dest.cols; x += 8) {
+            cv::Rect2i section (x, y, 8, 8);
+            int window[8][8];
+            for (int j = 0; j < 8; j++) {
+                for (int i = 0; i < 8; i++) {
+                    window [j][i] = exp (window [j][i]);
+                    window [j][i] -= 128;
+                    if (!i && !j) window [j][i] *= 8;
+                    else window [j][i] /= 16;
+                }
+            }
+            fast_idct_window_gray (window, {dest, section});
+        }
     }
     return dest;
 }
