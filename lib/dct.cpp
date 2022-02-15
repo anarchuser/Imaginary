@@ -99,8 +99,8 @@ cv::Mat idct_gray (cv::Mat const & src) {
 
                 for (int u = 0; u < src.cols; u++) {
                     double S = dct_backward_scale (srow [u]);
-                    double Cu = u ? 1.0 : (1.0 / sqrt (2.0));
-                    double Cv = v ? 1.0 : (1.0 / sqrt (2.0));
+                    double Cu = u ? 0.5 : (1.0 / sqrt (2.0));
+                    double Cv = v ? 0.5 : (1.0 / sqrt (2.0));
                     double q = Cu * Cv * S *
                                cos ((2.0 * x + 1) * u * PI / (2 * dest.cols)) *
                                cos ((2.0 * y + 1) * v * PI / (2 * dest.rows));
@@ -299,8 +299,8 @@ cv::Mat fast_idct_window_gray (int window [8][8], cv::Mat && dest) {
             for (int v = 0; v < 8; v++) {
                 for (int u = 0; u < 8; u++) {
                     double S = window [v][u];
-                    double Cu = u ? 1.0 : 1.0 / sqrt (2.0);
-                    double Cv = v ? 1.0 : 1.0 / sqrt (2.0);
+                    double Cu = u ? 0.5 : (1.0 / sqrt (2.0));
+                    double Cv = v ? 0.5 : (1.0 / sqrt (2.0));
                     double q = Cu * Cv * S *
                             cos ((2.0 * x + 1) * u * (PI / 16.0)) *
                             cos ((2.0 * y + 1) * v * (PI / 16.0));
