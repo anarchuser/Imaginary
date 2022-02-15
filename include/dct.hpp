@@ -12,6 +12,8 @@
 
 #include "config.h"
 
+#define DCT_COMPRESS 1
+
 struct BitMask {
 private:
     uint64 const mask;
@@ -22,6 +24,9 @@ public:
 
     [[nodiscard]] bool check (unsigned char x, unsigned char y) const;
 };
+
+double dct_forward_scale  (double freq);
+double dct_backward_scale (double freq);
 
 cv::Mat dct  (cv::Mat const & src);
 cv::Mat idct (cv::Mat const & src);

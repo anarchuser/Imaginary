@@ -12,7 +12,7 @@ set(LDLIBS_OPENCV "lopencv_core -l opencv_imgcodecs -l opencv_highgui -lopencv_p
 
 # Linker & compiler flags
 set(CMAKE_REQUIRED_LIBRARIES ${LDLIBS} ${LDLIBS_OPENCV})
-set(CMAKE_CXX_FLAGS "-fconcepts -ltbb")
+set(CMAKE_CXX_FLAGS "-ltbb -fconcepts -fopenmp")
 
 # List source files and define target
 file(GLOB_RECURSE LIBS ${PROJECT_SOURCE_DIR}/lib/*)

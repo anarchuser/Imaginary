@@ -10,11 +10,50 @@ bool BitMask::check (unsigned char x, unsigned char y) const {
     return mask & (long(1) << (8 * iy + ix));
 }
 
+double dct_forward_scale (double freq) {
+    // scale values between ~[-1.000.000, 1.000.000] to [0, 256]
+    double sign  = (freq > 0) - (freq < 0);
+    double value = std::abs (freq);
+    return sign * 9 * log (value) + 127;
+}
+
+double dct_backward_scale (double freq) {
+    double scaled = freq - 127;
+    double sign  = (scaled > 0) - (scaled < 0);
+    double value = std::abs (scaled);
+    return sign * exp (value / 9.0);
+}
+
 cv::Mat dct_gray (cv::Mat const & src) {
     LOG_ASSERT (src.channels() == 1);
 
-    cv::Mat dest ((src.rows / 8) * 8, (src.cols / 8) * 8, CV_64FC1);
+    cv::Mat dest (src.rows / DCT_COMPRESS, src.cols / DCT_COMPRESS, CV_64FC1);
 
+#pragma omp parallel for
+    for (int v = 0; v < dest.rows; v++) {
+        auto drow = dest.ptr <double> (v);
+
+        for (int u = 0; u < dest.cols; u++) {
+            double z = 0.0;
+            double Cu = u ? 1.0 : (1.0 / sqrt (2.0));
+            double Cv = v ? 1.0 : (1.0 / sqrt (2.0));
+
+            for (int y = 0; y < src.rows; y++) {
+                auto srow = src.ptr <double> (y);
+
+                for (int x = 0; x < src.cols; x++) {
+                    double S = srow [x];
+                    double q = S *
+                               cos ((2.0 * x + 1) * u * PI / (2 * dest.cols)) *
+                               cos ((2.0 * y + 1) * v * PI / (2 * dest.rows));
+                    z += q;
+                }
+            }
+            drow [u] = dct_forward_scale (0.25 * Cu * Cv * z);
+            if (!v) std::cout << "F(" << u << ",\t" << v << ") = " << drow [u] << std::endl;
+        }
+        std::cout << v << " / " << dest.rows << std::endl;
+    }
     return dest;
 }
 
@@ -44,8 +83,33 @@ cv::Mat fast_dct_gray (cv::Mat const & src) {
 cv::Mat idct_gray (cv::Mat const & src) {
     LOG_ASSERT (src.channels() == 1);
 
-    auto dest = src.clone();
+    cv::Mat dest (src.rows, src.cols, CV_64FC1);
 
+    for (int y = 0; y < dest.rows; y++) {
+        auto drow = dest.ptr <double> (y);
+
+        for (int x = 0; x < dest.cols; x++) {
+            double z = 0.0;
+
+            for (int v = 0; v < src.rows; v++) {
+                auto srow = src.ptr <double> (v);
+
+                for (int u = 0; u < src.cols; u++) {
+                    double S = dct_backward_scale (srow [u]);
+                    double Cu = u ? 1.0 : (1.0 / sqrt (2.0));
+                    double Cv = v ? 1.0 : (1.0 / sqrt (2.0));
+                    double q = Cu * Cv * S *
+                               cos ((2.0 * x + 1) * u * PI / (2 * dest.cols)) *
+                               cos ((2.0 * y + 1) * v * PI / (2 * dest.rows));
+                    z += q;
+                }
+            }
+            if (!y) std::cout << "I(" << x << ",\t" << y << ") = " << 0.25 * z << std::endl;
+            drow [x] = std::max (0.0, std::min (255.0, 0.25 * z));
+            //if (!y) std::cout << "I(" << x << ",\t" << y << ") = " << drow [x] << std::endl;
+        }
+        std::cout << y << " / " << dest.rows << std::endl;
+    }
     return dest;
 }
 
