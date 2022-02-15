@@ -70,10 +70,11 @@ cv::Mat fast_dct_gray (cv::Mat const & src) {
             fast_dct_window_gray ({src, section}, window);
             for (int j = 0; j < 8; j++) {
                 for (int i = 0; i < 8; i++) {
-                    if (!i && !j) window [j][i] /= 8;
-                    else window [j][i] *= 16;
-                    window [j][i] += 128;
-                    dest.at <double> (y + i, x + j) = std::min (255.0, std::max (0.0, std::log (window [j][i])));
+                    //if (!i && !j) window [j][i] /= 8;
+                    //else window [j][i] *= 16;
+                    //window [j][i] += 128;
+                    //window [j][i] = std::log (window [j][i]);
+                    dest.at <double> (y + j, x + i) = std::min (255.0, std::max (0.0, (double) window [j][i]));
                 }
             }
         }
@@ -126,11 +127,14 @@ cv::Mat fast_idct_gray (cv::Mat const & src) {
             cv::Rect2i section (x, y, 8, 8);
             int window[8][8];
             for (int j = 0; j < 8; j++) {
+                auto srow = src.ptr <double> (y + j);
+
                 for (int i = 0; i < 8; i++) {
-                    window [j][i] = exp (window [j][i]);
-                    window [j][i] -= 128;
-                    if (!i && !j) window [j][i] *= 8;
-                    else window [j][i] /= 16;
+                    window [j][i] = srow [x + i];
+                    //window [j][i] = exp (window [j][i]);
+                    //window [j][i] -= 128;
+                    //if (!i && !j) window [j][i] *= 8;
+                    //else window [j][i] /= 16;
                 }
             }
             fast_idct_window_gray (window, {dest, section});
@@ -294,17 +298,17 @@ cv::Mat fast_idct_window_gray (int window [8][8], cv::Mat && dest) {
 
             for (int v = 0; v < 8; v++) {
                 for (int u = 0; u < 8; u++) {
-                    double S = window [x][y];
+                    double S = window [v][u];
                     double Cu = u ? 1.0 : 1.0 / sqrt (2.0);
                     double Cv = v ? 1.0 : 1.0 / sqrt (2.0);
                     double q = Cu * Cv * S *
-                            cos (2.0 * x + 1) * u * (PI / 16.0) *
-                            cos (2.0 * y + 1) * v * (PI / 16.0);
+                            cos ((2.0 * x + 1) * u * (PI / 16.0)) *
+                            cos ((2.0 * y + 1) * v * (PI / 16.0));
 
                     z += q;
                 }
             }
-            drow [y] = std::min (255.0, std::max (0.0, z / 4.0));
+            drow [x] = std::min (255.0, std::max (0.0, z / 4.0));
         }
     }
     return dest;
