@@ -74,7 +74,7 @@ cv::Mat unsharp_mask_gray (cv::Mat const & src, double weight) {
         auto drow = dest.ptr <double> (y);
 
         for (int x = 0; x < src.cols; x++) {
-            drow [x] = std::max (0.0, std::min (255.0, 2 * drow [x] - weight * srow [x]));
+            drow [x] = std::max (0.0, std::min (255.0, (1.0 + weight) * drow [x] - weight * srow [x]));
         }
     }
     return dest;
