@@ -183,8 +183,10 @@ int main (int argc, char * argv[]) {
 //        apply ([](Image const & image) { return gray::resize_dims_l (image, 809, 401); });
 //        std::cout << "canny edge detection" << std::endl;
 //        APPLY (gray::canny_l, nullptr);
-//        std::cout << "canny edge detection with threshold 80" << std::endl;
-//        APPLY (gray::threshold_l, 80);
+        //std::cout << "canny edge detection with threshold 80" << std::endl;
+        //APPLY (gray::threshold_l, 80);
+        std::cout << "canny edge detection with average gray value as threshold" << std::endl;
+        APPLY (gray::threshold_l, -1);
 //        std::cout << "1:1 gray scale" << std::endl;
 //        APPLY (gray::intensity_scale_l, [] (double input) { return input; });
 //        std::cout << "gray inverted" << std::endl;
@@ -219,12 +221,12 @@ int main (int argc, char * argv[]) {
 //        APPLY (gray::unsharp_mask_l, 10.0);
 //        std::cout << "gray bit planes" << std::endl;
 //        APPLY (gray::bits_l, nullptr);
-        std::cout << "gray dct compression" << std::endl;
-        APPLY (gray::compress_l, 0b1111111011111100111110001111000011100000110000001000000000000000);
+        //std::cout << "gray dct compression" << std::endl;
+        //APPLY (gray::compress_l, 0b1111111011111100111110001111000011100000110000001000000000000000);
 //        APPLY (gray::compress_l, ~ long(0));
 //        APPLY (gray::compress_l, 0b1000000000000000000000000000000000000000000000000000000000000000);
-        std::cout << "gray fdct" << std::endl;
-        APPLY (gray::fast_dct_l, nullptr);
+        //std::cout << "gray fdct" << std::endl;
+        //APPLY (gray::fast_dct_l, nullptr);
 //        std::cout << "gray dct" << std::endl;
 //        APPLY (gray::dct_l, nullptr);
     }

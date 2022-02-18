@@ -17,6 +17,8 @@
 // https://homepages.inf.ed.ac.uk/rbf/HIPR2/sobel.htm
 cv::Mat sobel_approx_magnitude (cv::Mat const & src);
 
+double average_gray (cv::Mat const & src);
+
 cv::Mat threshold_gray (cv::Mat const & src, double threshold);
 
 cv::Mat canny (cv::Mat const & src);

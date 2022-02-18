@@ -26,8 +26,26 @@ cv::Mat sobel_approx_magnitude (cv::Mat const & src) {
     return out;
 }
 
+double average_gray (cv::Mat const & src) {
+    LOG_ASSERT (src.channels() == 1);
+
+    double accu = 0;
+
+    for (int y = 0; y < src.rows; y++) {
+        auto row = src.ptr <double> (y);
+
+        for (int x = 0; x < src.cols; x++) {
+            accu += row [x];
+        }
+    }
+    return accu / src.rows / src.cols;
+}
+
 cv::Mat threshold_gray (cv::Mat const & src, double threshold) {
     LOG_ASSERT (src.channels() == 1);
+    if (threshold < 0) {
+        threshold = average_gray (src);
+    }
 
     auto img = src.clone();
     for (int y = 0; y < img.rows; y++) {
