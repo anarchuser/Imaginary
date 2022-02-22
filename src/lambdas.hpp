@@ -3,6 +3,7 @@
 
 #include "config.h"
 
+#include "dilute.hpp"
 #include "multiply.hpp"
 #include "convolute.hpp"
 #include "resize.hpp"
@@ -125,6 +126,30 @@ namespace original {
         LOG (INFO) << "Original '" << image.first << "'\tsharpened using unsharp masking with weight " << weight << ": "
                    << deviation (image.second, sharpened);
         write_image (std::string ("original/unsharp/") + std::to_string (weight), out);
+        return out;
+    };
+
+    static auto const dilute_l = [] (Image const & image, int iterations) -> Image {
+        cv::Mat diluted = image.second;
+        for (int i = 0; i < iterations; i++) {
+            diluted = dilute (diluted);
+        }
+        auto out = Image (image.first, diluted);
+        LOG (INFO) << "Original '" << image.first << "'\t diluted " << iterations << "x: "
+                   << deviation (image.second, diluted);
+        write_image (std::string ("original/diluted/") + std::to_string (iterations), out);
+        return out;
+    };
+
+    static auto const erode_l = [] (Image const & image, int iterations) -> Image {
+        cv::Mat eroded = image.second;
+        for (int i = 0; i < iterations; i++) {
+            eroded = erode (eroded);
+        }
+        auto out = Image (image.first, eroded);
+        LOG (INFO) << "Original '" << image.first << "'\t eroded " << iterations << "x: "
+                   << deviation (image.second, eroded);
+        write_image (std::string ("original/eroded/") + std::to_string (iterations), out);
         return out;
     };
 

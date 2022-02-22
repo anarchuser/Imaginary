@@ -24,11 +24,6 @@ cv::Mat convolute (cv::Mat const & original, cv::Mat const & kernel) {
                         red   += original.at <Color_BGR> (y + ky, x + kx).red()   * kernel.at <double> (ky + kernel.rows / 2, kx + kernel.cols / 2);
                         green += original.at <Color_BGR> (y + ky, x + kx).green() * kernel.at <double> (ky + kernel.rows / 2, kx + kernel.cols / 2);
                         blue  += original.at <Color_BGR> (y + ky, x + kx).blue()  * kernel.at <double> (ky + kernel.rows / 2, kx + kernel.cols / 2);
-                    } else {
-                        kernel_sum += kernel.at <double> (kernel.rows / 2, kernel.cols / 2);
-                        red   += (double) original.at <Color_BGR> (y, x).red()   * kernel.at <double> (kernel.rows / 2, kernel.cols / 2);
-                        green += (double) original.at <Color_BGR> (y, x).green() * kernel.at <double> (kernel.rows / 2, kernel.cols / 2);
-                        blue  += (double) original.at <Color_BGR> (y, x).blue()  * kernel.at <double> (kernel.rows / 2, kernel.cols / 2);
                     }
                 }
             }
@@ -56,12 +51,10 @@ cv::Mat convolute_gray (cv::Mat const & original, cv::Mat const & kernel) {
             double kernel_sum = 0;
             for (int j = - kernel.rows / 2; j <= kernel.rows / 2; j++) {
                 for (int i = - kernel.cols / 2; i <= kernel.cols / 2; i++) {
-                    kernel_sum += ( within_bounds (original, x + i, y + j) )
-                           ? kernel.at <double> (j + kernel.rows / 2, i + kernel.cols / 2)
-                           : kernel.at <double> (kernel.rows / 2, kernel.cols / 2);
-                    sum += ( within_bounds (original, x + i, y + j) )
-                           ? original.at <double> (y + j, x + i) * kernel.at <double> (j + kernel.rows / 2, i + kernel.cols / 2)
-                           : original.at <double> (y, x) * kernel.at <double> (kernel.rows / 2, kernel.cols / 2);
+                    if (within_bounds (original, x + i, y + j)) {
+                        kernel_sum += kernel.at <double> (j + kernel.rows / 2, i + kernel.cols / 2);
+                        sum += original.at <double> (y + j, x + i) * kernel.at <double> (j + kernel.rows / 2, i + kernel.cols / 2);
+                    }
                 }
             }
             mod_row [x] = sum / (kernel_sum ?: 1);

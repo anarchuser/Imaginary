@@ -36,7 +36,8 @@ fs::path const IMG_OUT = PROJECT_ROOT "/out";
 #define IMAGE_OVERWRITE
 
 //#define ORIGINAL
-#define GRAYIFY
+//#define GRAYIFY
+#define REVIEW
 //#define RANDOM
 
 #endif //Imaginary_CONFIG_H
