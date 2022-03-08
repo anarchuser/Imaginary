@@ -20,52 +20,40 @@
 #include <filesystem>
 #include <iostream>
 
-#ifndef APPLY
-#define APPLY(function, val) apply ([](Image const & image) { return function (image, val); })
-#endif
+#define REVIEW_SIZE 7
 
 namespace fs = std::filesystem;
 
 namespace review {
-    std::string square_string (int size) {
-        auto out = std::to_string (size);
-        return out + 'x' + out;
-    }
-
-    static auto const mean_interpolate_l = [] (Image const & image, int size) -> Image {
-        auto kernel = cv::Mat (size, size, CV_64FC1, 1);
-        auto diluted = image.second;
-        for (int i = 0; i < size / 2; i++) {
-            diluted = dilute (diluted);
-        }
-        auto convoluted = convolute (diluted, kernel);
-        for (int i = 0; i < size / 2; i++) {
-            convoluted = erode (convoluted);
-        }
-        auto out = Image (image.first, convoluted);
-        LOG (INFO) << "Review '" << image.first << "'\tconvoluted with " << square_string (size) << " mean filter: "
-                   << deviation (image.second, out.second);
-        write_image (std::string ("review/mean/interpolate/") + square_string (size), out);
-        return out;
+    static auto const mean_l = [] (Image const & image) {
+        auto kernel = cv::Mat (REVIEW_SIZE, REVIEW_SIZE, CV_64FC1, 1);
+        
+        // Extrapolate
+        std::cout << "\tdilute" << std::endl;
+        auto extrapolate = dilute (image.second, REVIEW_SIZE / 2);
+        std::cout << "\tmean" << std::endl;
+        extrapolate = convolute (extrapolate, kernel);
+        std::cout << "\terode" << std::endl;
+        extrapolate = erode (extrapolate, REVIEW_SIZE / 2);
+        std::cout << "\twrite" << std::endl;
+        write_image (std::string ("review/mean_extrapolate"), {image.first, extrapolate});
+        
+        
     };
 
-    static auto const median_interpolate_l = [] (Image const & image, int size) -> Image {
-        auto kernel = cv::Mat (size, size, CV_64FC1, 1);
-        auto diluted = image.second;
-        for (int i = 0; i < size / 2; i++) {
-            diluted = dilute (diluted);
-        }
-        auto smoothed = median (diluted, size);
-        for (int i = 0; i < size / 2; i++) {
-            smoothed = erode (smoothed);
-        }
-        auto out = Image (image.first, smoothed);
-        LOG (INFO) << "Review '" << image.first << "'\tsmoothed with " << square_string (size) << " median filter: "
-                   << deviation (image.second, out.second);
-        write_image (std::string ("review/median/interpolate/") + square_string (size), out);
-        return out;
+    static auto const median_l = [] (Image const & image) {
+        // Extrapolate
+        std::cout << "\tdilute" << std::endl;
+        auto extrapolate = dilute (image.second, REVIEW_SIZE / 2);
+//        std::cout << "\tmedian" << std::endl;
+//        extrapolate = median (extrapolate, REVIEW_SIZE);
+        std::cout << "\terode" << std::endl;
+        extrapolate = erode (extrapolate, REVIEW_SIZE / 2);
+        std::cout << "\twrite" << std::endl;
+        write_image (std::string ("review/median_extrapolate"), {image.first, extrapolate});
+        
+        
     };
-
 }
 
 #endif //IMAGINARY_REVIEW_LAMBDAS_H

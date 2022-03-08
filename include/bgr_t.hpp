@@ -25,7 +25,7 @@ public:
     [[nodiscard]] unsigned char green() const;
     [[nodiscard]] unsigned char red() const;
 
-    Color_BGR (unsigned char blue, unsigned char green, unsigned char red);
+    Color_BGR (int blue, int green, int red);
     explicit Color_BGR (unsigned char const values [3]);
     Color_BGR & operator = (unsigned char const values [3]);
 
@@ -39,8 +39,6 @@ public:
     
     bool operator == (Color_BGR const & other) const;
     
-    std::ostream & operator << (std::ostream & os) const;
-
     Color_BGR operator & (unsigned char mask) const;
 
     [[nodiscard]] unsigned int sum() const;
@@ -51,7 +49,11 @@ public:
 
     [[nodiscard]] unsigned char const * end() const;
     [[nodiscard]] unsigned char       * end();
+    
+    static unsigned char bound (int value);
 };
+
+std::ostream & operator << (std::ostream & os, Color_BGR const & color);
 
 #endif //IMAGINARY_BGR_T_HPP
 

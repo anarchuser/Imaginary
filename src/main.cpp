@@ -56,26 +56,22 @@ int main (int argc, char * argv[]) {
         auto apply = [& originals] (Image lambda (Image const &)) {
             std::for_each (exec::par_unseq, originals.begin (), originals.end (), lambda);
         };
-        std::cout << "dilute, 1" << std::endl;
-        APPLY (original::dilute_l, 1);
-        std::cout << "dilute, 6" << std::endl;
-        APPLY (original::dilute_l, 6);
-        std::cout << "erode, 1" << std::endl;
-        APPLY (original::erode_l, 1);
-        std::cout << "erode, 6" << std::endl;
-        APPLY (original::erode_l, 6);
+        std::cout << "dilute, 7" << std::endl;
+        APPLY (original::dilute_l, 7);
+        std::cout << "erode, 7" << std::endl;
+        APPLY (original::erode_l, 7);
         std::cout << "mean, 3" << std::endl;
         APPLY (original::mean_l, 3);
-        std::cout << "mean, 5" << std::endl;
-        APPLY (original::mean_l, 5);
-        std::cout << "mean, 13" << std::endl;
-        APPLY (original::mean_l, 13);
+        std::cout << "mean, 7" << std::endl;
+        APPLY (original::mean_l, 7);
+//        std::cout << "mean, 13" << std::endl;
+//        APPLY (original::mean_l, 13);
         std::cout << "median, 3" << std::endl;
         APPLY (original::median_l, 3);
-        std::cout << "median, 5" << std::endl;
-        APPLY (original::median_l, 5);
-        std::cout << "median, 13" << std::endl;
-        APPLY (original::median_l, 13);
+        std::cout << "median, 7" << std::endl;
+        APPLY (original::median_l, 7);
+//        std::cout << "median, 13" << std::endl;
+//        APPLY (original::median_l, 13);
         std::cout << "convolute_gaussian, 5" << std::endl;
         APPLY (original::convolute_gaussian_l, 5);
         std::cout << "convolute_gaussian, 9" << std::endl;
@@ -246,14 +242,14 @@ int main (int argc, char * argv[]) {
 #ifdef REVIEW
     LOG (INFO) << "Apply operations to review images";
     {
-        auto apply = [& originals] (Image lambda (Image const &)) {
+        auto apply = [& originals] (void lambda (Image const &)) {
             std::for_each (exec::par_unseq, originals.begin (), originals.end (), lambda);
         };
 
-        std::cout << "review mean interpolate, 13" << std::endl;
-        APPLY (review::mean_interpolate_l, 13);
-        std::cout << "review median interpolate, 13" << std::endl;
-        APPLY (review::median_interpolate_l, 13);
+        std::cout << "review mean" << std::endl;
+        apply (review::mean_l);
+//        std::cout << "review median" << std::endl;
+//        apply (review::median_l);
     }
 #endif
 

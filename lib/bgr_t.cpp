@@ -8,10 +8,10 @@ unsigned char Color_BGR::blue()  const { return value[0]; };
 unsigned char Color_BGR::green() const { return value[1]; };
 unsigned char Color_BGR::red()   const { return value[2]; };
 
-Color_BGR::Color_BGR (unsigned char blue, unsigned char green, unsigned char red) {
-    value [0] = blue;
-    value [1] = green;
-    value [2] = red;
+Color_BGR::Color_BGR (int blue, int green, int red) {
+    value [0] = bound (blue);
+    value [1] = bound (green);
+    value [2] = bound (red);
 }
 
 Color_BGR::Color_BGR (unsigned char const values [3]) {
@@ -47,8 +47,8 @@ bool Color_BGR::operator == (Color_BGR const & other) const {
             this->blue() == other.blue();
 }
 
-std::ostream & Color_BGR::operator << (std::ostream & os) const {
-    return os << (short) blue() << " - " << (short) green() << " - " << (short) red();
+std::ostream & operator << (std::ostream & os, Color_BGR const & color) {
+    return os << (short) color.blue() << " - " << (short) color.green() << " - " << (short) color.red();
 }
 
 Color_BGR Color_BGR::operator & (unsigned char mask) const {
@@ -67,5 +67,9 @@ unsigned char       * Color_BGR::begin()       { return value; }
 
 unsigned char const * Color_BGR::end() const { return value + 3; }
 unsigned char       * Color_BGR::end()       { return value + 3; }
+
+unsigned char Color_BGR::bound (int value) {
+    return std::max (0, std::min (255, value));
+}
 
 /* Copyright (C) Aaron Alef */

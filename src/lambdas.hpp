@@ -130,10 +130,7 @@ namespace original {
     };
 
     static auto const dilute_l = [] (Image const & image, int iterations) -> Image {
-        cv::Mat diluted = image.second;
-        for (int i = 0; i < iterations; i++) {
-            diluted = dilute (diluted);
-        }
+        cv::Mat diluted = dilute (image.second, iterations);
         auto out = Image (image.first, diluted);
         LOG (INFO) << "Original '" << image.first << "'\t diluted " << iterations << "x: "
                    << deviation (image.second, diluted);
@@ -142,10 +139,7 @@ namespace original {
     };
 
     static auto const erode_l = [] (Image const & image, int iterations) -> Image {
-        cv::Mat eroded = image.second;
-        for (int i = 0; i < iterations; i++) {
-            eroded = erode (eroded);
-        }
+        cv::Mat eroded = erode (image.second, iterations);
         auto out = Image (image.first, eroded);
         LOG (INFO) << "Original '" << image.first << "'\t eroded " << iterations << "x: "
                    << deviation (image.second, eroded);
