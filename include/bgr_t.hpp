@@ -5,14 +5,14 @@
 #include <cmath>
 #include "config.h"
 
-//#define GRAY_WEIGHT_RED   0.333
-//#define GRAY_WEIGHT_GREEN 0.333
-//#define GRAY_WEIGHT_BLUE  0.333
+#define GRAY_WEIGHT_RED   (1/3)
+#define GRAY_WEIGHT_GREEN (1/3)
+#define GRAY_WEIGHT_BLUE  (1/3)
 
 // "Basics of Image Analysis", Fernando and Renfu, 2015
-#define GRAY_WEIGHT_RED   0.2162
-#define GRAY_WEIGHT_GREEN 0.7152
-#define GRAY_WEIGHT_BLUE  0.0722
+//#define GRAY_WEIGHT_RED   0.2162
+//#define GRAY_WEIGHT_GREEN 0.7152
+//#define GRAY_WEIGHT_BLUE  0.0722
 
 enum Color {
     RED,
