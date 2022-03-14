@@ -2,6 +2,8 @@
 #define IMAGINARY_BGR_T_HPP
 
 #include <iostream>
+#include <cmath>
+#include "config.h"
 
 //#define GRAY_WEIGHT_RED   0.333
 //#define GRAY_WEIGHT_GREEN 0.333
@@ -11,6 +13,20 @@
 #define GRAY_WEIGHT_RED   0.2162
 #define GRAY_WEIGHT_GREEN 0.7152
 #define GRAY_WEIGHT_BLUE  0.0722
+
+enum Color {
+    RED,
+    GREEN,
+    BLUE,
+
+    CYAN,
+    MAGENTA,
+    YELLOW,
+
+    HUE,
+    SATURATION,
+    INTENSITY
+};
 
 struct Color_BGR {
 private:
@@ -51,6 +67,10 @@ public:
     [[nodiscard]] unsigned char       * end();
     
     static unsigned char bound (int value);
+
+    unsigned char component (Color color) const;
+    unsigned char min() const;
+    unsigned char max() const;
 };
 
 std::ostream & operator << (std::ostream & os, Color_BGR const & color);

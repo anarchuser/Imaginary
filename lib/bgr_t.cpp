@@ -72,4 +72,50 @@ unsigned char Color_BGR::bound (int value) {
     return std::max (0, std::min (255, value));
 }
 
+unsigned char Color_BGR::min () const {
+    if (red() <= green() && red() <= blue()) 
+        return red();
+    else if (green() <= red() && green() <= blue()) 
+        return green();
+    else 
+        return blue();
+}
+
+unsigned char Color_BGR::max () const {
+    if (red() >= green() && red() >= blue())
+        return red();
+    else if (green() >= red() && green() >= blue())
+        return green();
+    else
+        return blue();
+}
+
+unsigned char Color_BGR::component (Color color) const {
+    double const MIN = min();
+    double const MAX = max();
+    switch (color) {
+        case RED:
+            return red();
+        case GREEN:
+            return green();
+        case BLUE:
+            return blue();
+        case CYAN:
+            return 255 - red();
+        case MAGENTA:
+            return 255 - green();
+        case YELLOW:
+            return 255 - blue();
+        case HUE:
+            return std::acos ((0.5 * (2 * red() - green() - blue())) / (std::sqrt ((red() - green()) * (red() - green()) - (red() - blue()) * (green() - blue()))));
+        case SATURATION:
+            return MAX ? 255.0 * std::max (0.0, (MAX - MIN) / MAX) : 0.0;
+        case INTENSITY:
+            return average();
+        default:
+            LOG (FATAL) << "Unknown component found";
+            return -1;
+    }
+}
+
 /* Copyright (C) Aaron Alef */

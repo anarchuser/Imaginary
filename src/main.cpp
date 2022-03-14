@@ -113,32 +113,32 @@ int main (int argc, char * argv[]) {
         //APPLY (original::scale_l, SHORT (0, 255));
         //std::cout << "original scaled to [96..160]" << std::endl;
         //APPLY (original::scale_l, SHORT (96, 160));
-        std::cout << "original sharpened" << std::endl;
-        APPLY (original::sharpen_l, nullptr);
-        std::cout << "original unsharp masked, 0.0" << std::endl;
-        APPLY (original::unsharp_mask_l, 0.0);
-        std::cout << "original unsharp masked, 1.0" << std::endl;
-        APPLY (original::unsharp_mask_l, 1.0);
-        std::cout << "original unsharp masked, 2.0" << std::endl;
-        APPLY (original::unsharp_mask_l, 2.0);
-        std::cout << "original unsharp masked, 3.0" << std::endl;
-        APPLY (original::unsharp_mask_l, 3.0);
-        std::cout << "original unsharp masked, 4.0" << std::endl;
-        APPLY (original::unsharp_mask_l, 4.0);
-        std::cout << "original unsharp masked, 5.0" << std::endl;
-        APPLY (original::unsharp_mask_l, 5.0);
-        std::cout << "original unsharp masked, 6.0" << std::endl;
-        APPLY (original::unsharp_mask_l, 6.0);
-        std::cout << "original unsharp masked, 7.0" << std::endl;
-        APPLY (original::unsharp_mask_l, 7.0);
-        std::cout << "original unsharp masked, 8.0" << std::endl;
-        APPLY (original::unsharp_mask_l, 8.0);
-        std::cout << "original unsharp masked, 9.0" << std::endl;
-        APPLY (original::unsharp_mask_l, 9.0);
-        std::cout << "original unsharp masked, 10.0" << std::endl;
-        APPLY (original::unsharp_mask_l, 10.0);
-        std::cout << "original bit planes" << std::endl;
-        APPLY (original::bits_l, nullptr);
+        //std::cout << "original sharpened" << std::endl;
+        //APPLY (original::sharpen_l, nullptr);
+        //std::cout << "original unsharp masked, 0.0" << std::endl;
+        //APPLY (original::unsharp_mask_l, 0.0);
+        //std::cout << "original unsharp masked, 1.0" << std::endl;
+        //APPLY (original::unsharp_mask_l, 1.0);
+        //std::cout << "original unsharp masked, 2.0" << std::endl;
+        //APPLY (original::unsharp_mask_l, 2.0);
+        //std::cout << "original unsharp masked, 3.0" << std::endl;
+        //APPLY (original::unsharp_mask_l, 3.0);
+        //std::cout << "original unsharp masked, 4.0" << std::endl;
+        //APPLY (original::unsharp_mask_l, 4.0);
+        //std::cout << "original unsharp masked, 5.0" << std::endl;
+        //APPLY (original::unsharp_mask_l, 5.0);
+        //std::cout << "original unsharp masked, 6.0" << std::endl;
+        //APPLY (original::unsharp_mask_l, 6.0);
+        //std::cout << "original unsharp masked, 7.0" << std::endl;
+        //APPLY (original::unsharp_mask_l, 7.0);
+        //std::cout << "original unsharp masked, 8.0" << std::endl;
+        //APPLY (original::unsharp_mask_l, 8.0);
+        //std::cout << "original unsharp masked, 9.0" << std::endl;
+        //APPLY (original::unsharp_mask_l, 9.0);
+        //std::cout << "original unsharp masked, 10.0" << std::endl;
+        //APPLY (original::unsharp_mask_l, 10.0);
+        //std::cout << "original bit planes" << std::endl;
+        //APPLY (original::bits_l, nullptr);
     }
 #endif
 
@@ -246,10 +246,12 @@ int main (int argc, char * argv[]) {
             std::for_each (exec::par_unseq, originals.begin (), originals.end (), lambda);
         };
 
-        std::cout << "review mean" << std::endl;
-        apply (review::mean_l);
-//        std::cout << "review median" << std::endl;
-//        apply (review::median_l);
+        //std::cout << "review mean" << std::endl;
+        //apply (review::mean_l);
+        //std::cout << "review median" << std::endl;
+        //apply (review::median_l);
+        std::cout << "review split components" << std::endl;
+        apply (review::component_l);
     }
 #endif
 
